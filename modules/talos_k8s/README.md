@@ -1,57 +1,46 @@
-# Talos
+<!-- BEGIN_TF_DOCS -->
+## Requirements
 
-## Provisionner un cluster k8s
+| Name | Version |
+|------|---------|
+| <a name="requirement_talos"></a> [talos](#requirement\_talos) | >=0.6.0 |
 
-```sh
-terraform apply -auto-approve
-terraform output -raw kubeconfig > kubeconfig-talos-cluster
-terraform output -raw talosconfig > talosconfig-talos-cluster
+## Providers
 
-cp kubeconfig-talos-cluster $HOME/.kube/config
-k9s --kubeconfig kubeconfig-talos-cluster
-```
+| Name | Version |
+|------|---------|
+| <a name="provider_talos"></a> [talos](#provider\_talos) | >=0.6.0 |
 
-Et voila !
+## Modules
 
-En gros le provisionning Terraform pour Talos est l'équivalent de ceci en ligne de commande:
+No modules.
 
-```sh
-# generate Machine Configurations
-export CONTROL_PLANE_IP=192.168.10.220
-talosctl gen config talos-proxmox-cluster https://$CONTROL_PLANE_IP:6443 --output-dir _out --force
+## Resources
 
-# create Control Plane Node
-talosctl apply-config --insecure --nodes $CONTROL_PLANE_IP --file _out/controlplane.yaml
-talosctl apply-config --insecure --nodes 192.168.10.221 --file _out/controlplane.yaml
+| Name | Type |
+|------|------|
+| [talos_cluster_kubeconfig.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/cluster_kubeconfig) | resource |
+| [talos_machine_bootstrap.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_bootstrap) | resource |
+| [talos_machine_configuration_apply.controlplane](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
+| [talos_machine_configuration_apply.worker](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
+| [talos_machine_configuration_apply.worker-gpu](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
+| [talos_machine_secrets.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_secrets) | resource |
+| [talos_client_configuration.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/client_configuration) | data source |
+| [talos_cluster_health.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/cluster_health) | data source |
+| [talos_machine_configuration.controlplane](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/machine_configuration) | data source |
+| [talos_machine_configuration.worker](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/machine_configuration) | data source |
 
-# create Worker Node
-talosctl apply-config --insecure --nodes 192.168.10.233 --file _out/worker.yaml
-talosctl apply-config --insecure --nodes 192.168.10.234 --file _out/worker.yaml
+## Inputs
 
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name     = string<br/>    endpoint = string<br/>  })</pre> | n/a | yes |
+| <a name="input_nodes"></a> [nodes](#input\_nodes) | Configuration for worker nodes | <pre>map(object({<br/>    install_disk = string<br/>    hostname     = optional(string)<br/>    machine_type = string<br/>    ip           = string<br/>    gpu          = optional(bool, false)<br/>  }))</pre> | n/a | yes |
 
-# using the Cluster
-export TALOSCONFIG="_out/talosconfig"
-talosctl config endpoint $CONTROL_PLANE_IP
-talosctl config node $CONTROL_PLANE_IP
+## Outputs
 
-# bootstrap Etcd
-talosctl bootstrap
-
-# retrieve the kubeconfig
-talosctl kubeconfig .
-```
-
-## Utiliser le cluster
-
-```sh
-export CONTROL_PLANE_IP=192.168.10.220
-export WORKER_IP=192.168.10.226
-export TALOSCONFIG="talosconfig-talos-cluster"
-talosctl config endpoint $CONTROL_PLANE_IP
-talosctl config node $WORKER_IP
-```
-
-## Docs
-
-* <https://www.talos.dev/v1.7/talos-guides/install/virtualized-platforms/proxmox/>
-* <https://github.com/siderolabs/contrib/tree/main/examples/terraform/basic>
+| Name | Description |
+|------|-------------|
+| <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | n/a |
+| <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | n/a |
+<!-- END_TF_DOCS -->
