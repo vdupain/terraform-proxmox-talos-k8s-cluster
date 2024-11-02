@@ -1,0 +1,25 @@
+machine:
+  sysctls:
+    vm.nr_hugepages: "1024"
+  nodeLabels:
+    openebs.io/engine: mayastor
+  disks:
+    - device: /dev/sdb
+      partitions:
+        - mountpoint: /var/storage/local-sdb
+  kubelet:
+    extraMounts:
+      - destination: /var/openebs/local
+        type: bind
+        source: /var/openebs/local
+        options:
+          - rbind
+          - rshared
+          - rw
+      - destination: /var/storage/local-sdb
+        type: bind
+        source: /var/storage/local-sdb
+        options:
+          - rbind
+          - rshared
+          - rw
