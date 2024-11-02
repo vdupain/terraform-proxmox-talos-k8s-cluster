@@ -1,0 +1,2 @@
+export PROXMOX_VE_USERNAME="user@pam"
+export PROXMOX_VE_PASSWORD="password"

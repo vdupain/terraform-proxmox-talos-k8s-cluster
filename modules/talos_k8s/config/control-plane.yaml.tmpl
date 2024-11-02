@@ -1,0 +1,24 @@
+machine:
+  install:
+    disk: ${install_disk}
+  network:
+    hostname: ${hostname}
+# https://www.talos.dev/v1.7/talos-guides/configuration/time-sync/#additional-configuration
+  time:
+    servers:
+      - /dev/ptp0
+
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  inlineManifests:
+  - name: cilium-values
+    contents: |
+      ${indent(6, cilium_values)}
+  - name: cilium-bootstrap
+    contents: |
+      ${indent(6, cilium_install)}
