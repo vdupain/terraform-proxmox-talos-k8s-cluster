@@ -5,7 +5,7 @@ provider "proxmox" {
   tmp_dir       = "/tmp"
   random_vm_ids = true
   ssh {
-    agent    = false
+    agent    = var.proxmox.ssh_agent
     username = var.proxmox.username
     password = var.proxmox.password
   }
