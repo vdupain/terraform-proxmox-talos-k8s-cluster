@@ -7,14 +7,14 @@ output "vm_ipv4_address_vms" {
 
 output "kube_config" {
   description = "Retrieves the kubeconfig for a k8s Talos cluster"
-  value     = module.talos_k8s.kube_config.kubeconfig_raw
-  sensitive = true
+  value       = module.talos_k8s.kube_config.kubeconfig_raw
+  sensitive   = true
 }
 
 output "talos_config" {
   description = "Retrieves the talosconfig for a k8s Talos cluster"
-  value     = module.talos_k8s.talos_config.talos_config
-  sensitive = true
+  value       = module.talos_k8s.talos_config.talos_config
+  sensitive   = true
 }
 
 resource "local_file" "talos_config" {
@@ -31,6 +31,6 @@ resource "local_file" "kube_config" {
 
 output "cluster_name" {
   description = "Retrieves the name for a k8s Talos cluster"
-  value     = var.cluster.name
-  sensitive = false
+  value       = var.cluster.name
+  sensitive   = false
 }

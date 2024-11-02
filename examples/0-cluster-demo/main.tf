@@ -51,9 +51,9 @@ module "talos-k8s-cluster" {
   proxmox = {
     endpoint  = "https://pve.domain:8006"
     insecure  = true
-    username     = "user"
-    password     = "password"
-    api_token    = "user@pve!terraform=secret"
+    username  = "user"
+    password  = "password"
+    api_token = "user@pve!terraform=secret"
   }
 
   github = {

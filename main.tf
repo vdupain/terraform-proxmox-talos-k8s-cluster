@@ -27,7 +27,7 @@ module "talos_k8s" {
 }
 
 module "fluxcd" {
-  count = (var.github == null) ? 0 : 1
+  count      = (var.github == null) ? 0 : 1
   depends_on = [module.talos_k8s]
   source     = "./modules/fluxcd"
 
