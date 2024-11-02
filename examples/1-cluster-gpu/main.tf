@@ -1,6 +1,6 @@
 module "talos-k8s-cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.0.0-rc0"
+  version = "1.0.0-rc1"
 
   cluster = {
     name     = "cluster-gpu"
