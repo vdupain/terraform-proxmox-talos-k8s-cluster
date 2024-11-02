@@ -7,10 +7,10 @@ provider "flux" {
   }
 
   git = {
-    url =  (var.github !=null) ? "https://github.com/${var.github.org}/${var.github.repository}.git" : "https://dummy"
+    url = (var.github != null) ? "https://github.com/${var.github.org}/${var.github.repository}.git" : "https://dummy"
     http = {
       username = "git" # This can be any string when using a personal access token
-      password = (var.github !=null) ? var.github.token : null
+      password = (var.github != null) ? var.github.token : null
     }
-  }  
+  }
 }

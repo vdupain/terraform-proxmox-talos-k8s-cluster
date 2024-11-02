@@ -74,10 +74,10 @@ module "talos-k8s-cluster" {
   }
 
   proxmox = {
-    endpoint  = "https://pve.domain:8006"
+    endpoint = "https://pve.domain:8006"
     insecure = true
-    username     = "user"
-    password     = "password"
+    username = "user"
+    password = "password"
     # using PROXMOX_VE_USERNAME instead of api token
     # https://github.com/Telmate/terraform-provider-proxmox/issues/764
     # see .envrc
