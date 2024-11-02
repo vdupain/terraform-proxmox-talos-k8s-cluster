@@ -7,7 +7,7 @@ Terraform module for creating a Kubernetes Cluster
 * and bootraping it with fluxcd
 
 
-## Requirements
+## Prerequisites
 
 * [Proxmox Virtual Environment 8.2.5](<https://www.proxmox.com/en/>)
 * [Terraform v1.9.8](<https://developer.hashicorp.com/terraform>)
@@ -19,7 +19,6 @@ Before running the module, you need to have an up and running Proxmox cluster co
 
 
 ## Usage
-
 
 ```sh
 cat main.tf
@@ -174,3 +173,52 @@ $ flux --kubeconfig output/kube-config.yaml get kustomization -A
 NAMESPACE  	NAME       	REVISION          	SUSPENDED	READY	MESSAGE
 flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: main@sha1:5902d505
 ```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_flux"></a> [flux](#requirement\_flux) | >=1.4.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.31.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_local"></a> [local](#provider\_local) | n/a |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_fluxcd"></a> [fluxcd](#module\_fluxcd) | ./modules/fluxcd | n/a |
+| <a name="module_talos_k8s"></a> [talos\_k8s](#module\_talos\_k8s) | ./modules/talos_k8s | n/a |
+| <a name="module_vms"></a> [vms](#module\_vms) | ./modules/vms | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [local_file.kube_config](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.talos_config](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    gateway  = string<br/>    cidr     = number<br/>    vlan_id  = optional(number, null)<br/>    name     = string<br/>    endpoint = string<br/>  })</pre> | n/a | yes |
+| <a name="input_github"></a> [github](#input\_github) | Github Flux GitOps configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | `null` | no |
+| <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
+| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | n/a | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = string<br/>    api_token = string<br/>  })</pre> | n/a | yes |
+| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = string<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    gpu            = optional(bool, false)<br/>    install_disk   = string<br/>    hostname       = optional(string)<br/>  }))</pre> | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Retrieves the name for a k8s Talos cluster |
+| <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | Retrieves the kubeconfig for a k8s Talos cluster |
+| <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | Retrieves the talosconfig for a k8s Talos cluster |
+| <a name="output_vm_ipv4_address_vms"></a> [vm\_ipv4\_address\_vms](#output\_vm\_ipv4\_address\_vms) | Retrieves IPv4 address for a k8s Talos cluster |
+<!-- END_TF_DOCS -->
