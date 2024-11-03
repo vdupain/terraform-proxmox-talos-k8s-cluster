@@ -11,7 +11,7 @@ Terraform module for creating a Kubernetes Cluster
 
 * [Proxmox Virtual Environment 8.2.5](<https://www.proxmox.com/en/>)
 * [Terraform v1.9.8](<https://developer.hashicorp.com/terraform>)
-* [Talos](<https://www.talos.dev/v1.8/introduction/getting-started/>)
+* [Talos v1.8](<https://www.talos.dev/v1.8/introduction/getting-started/>)
 * [Kubernetes](<https://kubernetes.io/docs/reference/kubectl/>)
 * [fluxcd 2.4.0](<https://fluxcd.io/>)
  
@@ -210,7 +210,7 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    gateway  = string<br/>    cidr     = number<br/>    vlan_id  = optional(number, null)<br/>    name     = string<br/>    endpoint = string<br/>  })</pre> | n/a | yes |
 | <a name="input_github"></a> [github](#input\_github) | Github Flux GitOps configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | `null` | no |
 | <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
-| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = optional(string)<br/>    api_token = string<br/>    ssh_agent  = optional(string,false)<br/>  })</pre> | n/a | yes |
+| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = optional(string)<br/>    api_token = string<br/>    ssh_agent = optional(string, false)<br/>  })</pre> | n/a | yes |
 | <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = string<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    gpu            = optional(bool, false)<br/>    install_disk   = string<br/>    hostname       = optional(string)<br/>  }))</pre> | n/a | yes |
 
 ## Outputs

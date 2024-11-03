@@ -32,7 +32,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name    = string<br/>    gateway = string<br/>    cidr    = number<br/>    vlan_id = optional(number, null)<br/>  })</pre> | n/a | yes |
 | <a name="input_pci"></a> [pci](#input\_pci) | Configuration mapping PCI | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
-| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = optional(string)<br/>    api_token = string<br/>    ssh_agent  = optional(string,false)<br/>  })</pre> | n/a | yes |
+| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = optional(string)<br/>    api_token = string<br/>    ssh_agent = optional(string, false)<br/>  })</pre> | n/a | yes |
 | <a name="input_vms"></a> [vms](#input\_vms) | Configuration for cluster nodes | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = string<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    gpu            = optional(bool, false)<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
