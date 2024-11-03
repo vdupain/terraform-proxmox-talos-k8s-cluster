@@ -39,3 +39,4 @@ terraform.rc
 tests
 .envrc
 examples/**/.terraform.lock.hcl
+**/output/*
