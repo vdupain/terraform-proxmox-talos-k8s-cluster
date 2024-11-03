@@ -1,9 +1,9 @@
 module "talos-k8s-cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.0.0-rc3"
+  version = "1.0.0-rc4"
 
   cluster = {
-    name     = "cluster-demo"
+    name     = "demo-cluster"
     gateway  = "192.168.10.1"
     cidr     = 24
     endpoint = "192.168.10.210"
