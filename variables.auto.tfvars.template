@@ -1,5 +1,5 @@
 cluster = {
-  name     = "cluster-v1"
+  name     = "my-cluster"
   gateway  = "192.168.10.1"
   cidr     = 24
   endpoint = "192.168.10.220"
