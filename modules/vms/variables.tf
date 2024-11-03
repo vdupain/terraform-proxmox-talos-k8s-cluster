@@ -5,7 +5,7 @@ variable "proxmox" {
     insecure  = bool
     username  = string
     password  = optional(string)
-    api_token = string
+    api_token = optional(string)
     ssh_agent = optional(string, false)
   })
   sensitive = true
