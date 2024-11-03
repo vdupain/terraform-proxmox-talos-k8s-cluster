@@ -37,3 +37,5 @@ override.tf.json
 terraform.rc
 
 tests
+.envrc
+examples/**/.terraform.lock.hcl
