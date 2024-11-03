@@ -39,5 +39,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_config_ipv4_addresses"></a> [config\_ipv4\_addresses](#output\_config\_ipv4\_addresses) | n/a |
 | <a name="output_vm_ipv4_address_vms"></a> [vm\_ipv4\_address\_vms](#output\_vm\_ipv4\_address\_vms) | n/a |
 <!-- END_TF_DOCS -->
