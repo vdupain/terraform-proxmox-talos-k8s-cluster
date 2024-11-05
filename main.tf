@@ -23,7 +23,6 @@ module "talos_k8s" {
   cluster = {
     name         = var.cluster.name
     endpoint     = var.cluster.endpoint
-    install_disk = var.cluster.install_disk
     network_dhcp = var.cluster.network_dhcp
   }
 

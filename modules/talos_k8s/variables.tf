@@ -3,7 +3,6 @@ variable "cluster" {
   type = object({
     name         = string
     endpoint     = string
-    install_disk = string
     network_dhcp = optional(bool, false)
   })
 }
@@ -14,6 +13,7 @@ variable "nodes" {
     hostname     = optional(string)
     machine_type = string
     ip           = string
+    install_disk  = optional(string, "/dev/sda")
     gpu          = optional(bool, false)
   }))
 }

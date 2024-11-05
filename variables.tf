@@ -14,14 +14,13 @@ variable "proxmox" {
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
+    name          = string
+    talos_version = optional(string, "v1.8.2")
     network_dhcp  = optional(bool, false)
     gateway       = optional(string)
     cidr          = optional(number)
     vlan_id       = optional(number, null)
-    name          = string
     endpoint      = optional(string)
-    talos_version = optional(string, "v1.8.2")
-    install_disk  = optional(string, "/dev/sda")
   })
 }
 
@@ -36,6 +35,7 @@ variable "vms" {
     ram_dedicated  = number
     os_disk_size   = number
     data_disk_size = number
+    install_disk  = optional(string, "/dev/sda")
     gpu            = optional(bool, false)
     hostname       = optional(string)
   }))
