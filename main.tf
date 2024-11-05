@@ -9,6 +9,7 @@ module "vms" {
     cidr          = var.cluster.cidr
     vlan_id       = var.cluster.vlan_id
     talos_version = var.cluster.talos_version
+    network_dhcp  = var.cluster.network_dhcp
   }
 
   vms = var.vms
@@ -20,11 +21,17 @@ module "talos_k8s" {
   source     = "./modules/talos_k8s"
 
   cluster = {
-    name     = var.cluster.name
-    endpoint = var.cluster.endpoint
+    name         = var.cluster.name
+    endpoint     = var.cluster.endpoint
+    install_disk = var.cluster.install_disk
+    network_dhcp = var.cluster.network_dhcp
   }
 
-  nodes = var.vms
+  nodes = { for k, vm in var.vms : k => merge(vm, {
+    ip = lookup(module.vms.qemu_ipv4_addresses, k, vm.ip)
+  }) }
+
+
 }
 
 module "fluxcd" {

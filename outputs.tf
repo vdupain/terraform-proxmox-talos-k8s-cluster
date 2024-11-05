@@ -8,6 +8,11 @@ output "config_ipv4_addresses" {
   value       = module.vms.config_ipv4_addresses
 }
 
+output "qemu_ipv4_addresses" {
+  description = "Retrieves VM names with IPv4 address for a k8s Talos cluster"
+  value       = module.vms.qemu_ipv4_addresses
+}
+
 output "kube_config" {
   description = "Retrieves the kubeconfig for a k8s Talos cluster"
   value       = module.talos_k8s.kube_config.kubeconfig_raw
