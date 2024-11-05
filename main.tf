@@ -4,10 +4,11 @@ module "vms" {
   proxmox = var.proxmox
 
   cluster = {
-    name    = var.cluster.name
-    gateway = var.cluster.gateway
-    cidr    = var.cluster.cidr
-    vlan_id = var.cluster.vlan_id
+    name          = var.cluster.name
+    gateway       = var.cluster.gateway
+    cidr          = var.cluster.cidr
+    vlan_id       = var.cluster.vlan_id
+    talos_version = var.cluster.talos_version
   }
 
   vms = var.vms
