@@ -35,7 +35,7 @@ resource "talos_machine_configuration_apply" "controlplane" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/control-plane.yaml.tmpl", {
-      hostname       = each.value.hostname
+      hostname       = "${var.cluster.name}-${each.key}"
       install_disk   = each.value.install_disk
       cilium_values  = file("${path.module}/kubernetes/cilium-values.yaml")
       cilium_install = file("${path.module}/kubernetes/cilium-install.yaml")
@@ -55,7 +55,7 @@ resource "talos_machine_configuration_apply" "worker" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/worker.yaml.tmpl", {
-      hostname     = each.value.hostname
+      hostname     = "${var.cluster.name}-${each.key}"
       install_disk = each.value.install_disk
     }),
     file("${path.module}/config/storage-patch.yaml"),
@@ -72,7 +72,7 @@ resource "talos_machine_configuration_apply" "worker-gpu" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/worker.yaml.tmpl", {
-      hostname     = each.value.hostname
+      hostname     = "${var.cluster.name}-${each.key}"
       install_disk = each.value.install_disk
     }),
     file("${path.module}/config/storage-patch.yaml"),

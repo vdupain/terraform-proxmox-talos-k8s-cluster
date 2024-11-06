@@ -19,8 +19,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-0"
     }
   }
 

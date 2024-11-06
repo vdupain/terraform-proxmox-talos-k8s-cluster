@@ -15,8 +15,6 @@ vms = {
     os_disk_size   = 10
     data_disk_size = 10
     datastore_id   = "local-lvm"
-    install_disk   = "/dev/sda"
-    hostname       = "cp-0"
   }
   "k8s-cp-1" = {
     host_node      = "pve1"
@@ -27,8 +25,6 @@ vms = {
     os_disk_size   = 10
     data_disk_size = 10
     datastore_id   = "local-lvm"
-    install_disk   = "/dev/sda"
-    hostname       = "cp-1"
   }
   "k8s-cp-2" = {
     host_node      = "pve0"
@@ -39,8 +35,6 @@ vms = {
     os_disk_size   = 10
     data_disk_size = 10
     datastore_id   = "local-lvm"
-    install_disk   = "/dev/sda"
-    hostname       = "cp-2"
   }
   "k8s-worker-0" = {
     host_node      = "pve1"
@@ -51,7 +45,5 @@ vms = {
     os_disk_size   = 10
     data_disk_size = 10
     datastore_id   = "local-lvm"
-    install_disk   = "/dev/sda"
-    hostname       = "worker-0"
   }
 }
