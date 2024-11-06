@@ -6,3 +6,8 @@ output "cluster_name" {
 output "config_ipv4_addresses" {
   value = module.talos-k8s-cluster.config_ipv4_addresses
 }
+
+
+output "qemu_ipv4_addresses" {
+  value = module.talos-k8s-cluster.qemu_ipv4_addresses
+}

@@ -1,15 +1,19 @@
+locals {
+  first_control_plane = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+}
+
 resource "talos_machine_secrets" "this" {}
 
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster.name
-  cluster_endpoint = "https://${var.cluster.endpoint}:6443"
+  cluster_endpoint = var.cluster.network_dhcp ? "https://${local.first_control_plane}:6443" : "https://${var.cluster.endpoint}:6443"
   machine_type     = "controlplane"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 }
 
 data "talos_machine_configuration" "worker" {
   cluster_name     = var.cluster.name
-  cluster_endpoint = "https://${var.cluster.endpoint}:6443"
+  cluster_endpoint = var.cluster.network_dhcp ? "https://${local.first_control_plane}:6443" : "https://${var.cluster.endpoint}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 }
@@ -31,7 +35,7 @@ resource "talos_machine_configuration_apply" "controlplane" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/control-plane.yaml.tmpl", {
-      hostname       = each.value.hostname
+      hostname       = "${var.cluster.name}-${each.key}"
       install_disk   = each.value.install_disk
       cilium_values  = file("${path.module}/kubernetes/cilium-values.yaml")
       cilium_install = file("${path.module}/kubernetes/cilium-install.yaml")
@@ -51,7 +55,7 @@ resource "talos_machine_configuration_apply" "worker" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/worker.yaml.tmpl", {
-      hostname     = each.value.hostname
+      hostname     = "${var.cluster.name}-${each.key}"
       install_disk = each.value.install_disk
     }),
     file("${path.module}/config/storage-patch.yaml"),
@@ -68,7 +72,7 @@ resource "talos_machine_configuration_apply" "worker-gpu" {
   node = each.value.ip
   config_patches = [
     templatefile("${path.module}/config/worker.yaml.tmpl", {
-      hostname     = each.value.hostname
+      hostname     = "${var.cluster.name}-${each.key}"
       install_disk = each.value.install_disk
     }),
     file("${path.module}/config/storage-patch.yaml"),

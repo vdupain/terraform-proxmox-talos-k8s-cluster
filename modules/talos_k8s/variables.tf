@@ -1,18 +1,18 @@
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
-    name     = string
-    endpoint = string
+    name         = string
+    endpoint     = string
+    network_dhcp = optional(bool, false)
   })
 }
 
 variable "nodes" {
   description = "Configuration for worker nodes"
   type = map(object({
-    install_disk = string
-    hostname     = optional(string)
     machine_type = string
     ip           = string
+    install_disk = optional(string, "/dev/sda")
     gpu          = optional(bool, false)
   }))
 }

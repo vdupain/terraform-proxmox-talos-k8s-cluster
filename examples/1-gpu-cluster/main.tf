@@ -1,62 +1,49 @@
 module "talos-k8s-cluster" {
-  source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.0.0-rc6"
+  #source  = "vdupain/talos-k8s-cluster/proxmox"
+  #version = "1.0.0-rc6"
+  source = "../.."
 
   cluster = {
-    name     = "gpu-cluster"
-    gateway  = "192.168.10.1"
-    cidr     = 24
-    endpoint = "192.168.10.220"
+    name         = "gpu-cluster"
+    network_dhcp = true
   }
 
   vms = {
     "k8s-cp-0" = {
       host_node      = "pve3"
       machine_type   = "controlplane"
-      ip             = "192.168.10.220"
-      cpu            = 4
-      ram_dedicated  = 8196
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-0"
-    }
-    "k8s-cp-1" = {
-      host_node      = "pve3"
-      machine_type   = "controlplane"
-      ip             = "192.168.10.221"
-      cpu            = 4
-      ram_dedicated  = 8196
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-1"
-    }
-    "k8s-cp-2" = {
-      host_node      = "pve3"
-      machine_type   = "controlplane"
-      ip             = "192.168.10.222"
-      cpu            = 4
-      ram_dedicated  = 8196
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-2"
-    }
-    "k8s-worker-gpu" = {
-      host_node      = "pve3"
-      machine_type   = "worker"
-      ip             = "192.168.10.223"
       cpu            = 4
       ram_dedicated  = 8196
       os_disk_size   = 20
       data_disk_size = 20
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "worker-gpu"
+    }
+    "k8s-cp-1" = {
+      host_node      = "pve3"
+      machine_type   = "controlplane"
+      cpu            = 4
+      ram_dedicated  = 8196
+      os_disk_size   = 20
+      data_disk_size = 20
+      datastore_id   = "local-lvm"
+    }
+    "k8s-cp-2" = {
+      host_node      = "pve3"
+      machine_type   = "controlplane"
+      cpu            = 4
+      ram_dedicated  = 8196
+      os_disk_size   = 20
+      data_disk_size = 20
+      datastore_id   = "local-lvm"
+    }
+    "k8s-worker-gpu" = {
+      host_node      = "pve3"
+      machine_type   = "worker"
+      cpu            = 4
+      ram_dedicated  = 8196
+      os_disk_size   = 20
+      data_disk_size = 20
+      datastore_id   = "local-lvm"
       gpu            = true
     }
 
