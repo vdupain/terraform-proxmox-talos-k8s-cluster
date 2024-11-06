@@ -43,8 +43,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-0"
     }
     "k8s-cp-1" = {
       host_node      = "pve1"
@@ -55,8 +53,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-1"
     }
     "k8s-cp-2" = {
       host_node      = "pve1"
@@ -67,8 +63,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-2"
     }
   }
 
@@ -207,11 +201,11 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    gateway       = string<br/>    cidr          = number<br/>    vlan_id       = optional(number, null)<br/>    name          = string<br/>    endpoint      = string<br/>    talos_version = optional(string, "v1.8.2")<br/>  })</pre> | n/a | yes |
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name          = string<br/>    talos_version = optional(string, "v1.8.2")<br/>    network_dhcp  = optional(bool, false)<br/>    gateway       = optional(string)<br/>    cidr          = optional(number)<br/>    vlan_id       = optional(number, null)<br/>    endpoint      = optional(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_github"></a> [github](#input\_github) | Github Flux GitOps configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | `null` | no |
 | <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = optional(string)<br/>    api_token = optional(string)<br/>    ssh_agent = optional(string, false)<br/>  })</pre> | n/a | yes |
-| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = string<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    gpu            = optional(bool, false)<br/>    install_disk   = string<br/>    hostname       = optional(string)<br/>  }))</pre> | n/a | yes |
+| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = optional(string)<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    install_disk   = optional(string, "/dev/sda")<br/>    gpu            = optional(bool, false)<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
 
@@ -220,6 +214,7 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Retrieves the name for a k8s Talos cluster |
 | <a name="output_config_ipv4_addresses"></a> [config\_ipv4\_addresses](#output\_config\_ipv4\_addresses) | Retrieves VM names with IPv4 address for a k8s Talos cluster |
 | <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | Retrieves the kubeconfig for a k8s Talos cluster |
+| <a name="output_qemu_ipv4_addresses"></a> [qemu\_ipv4\_addresses](#output\_qemu\_ipv4\_addresses) | Retrieves VM names with IPv4 address for a k8s Talos cluster |
 | <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | Retrieves the talosconfig for a k8s Talos cluster |
 | <a name="output_vm_ipv4_address_vms"></a> [vm\_ipv4\_address\_vms](#output\_vm\_ipv4\_address\_vms) | Retrieves IPv4 address for a k8s Talos cluster |
 <!-- END_TF_DOCS -->

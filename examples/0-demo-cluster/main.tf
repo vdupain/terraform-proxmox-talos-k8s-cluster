@@ -19,8 +19,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-0"
     }
     "k8s-cp-1" = {
       host_node      = "pve"
@@ -31,8 +29,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-1"
     }
     "k8s-cp-2" = {
       host_node      = "pve"
@@ -43,8 +39,6 @@ module "talos-k8s-cluster" {
       os_disk_size   = 10
       data_disk_size = 10
       datastore_id   = "local-lvm"
-      install_disk   = "/dev/sda"
-      hostname       = "cp-2"
     }
   }
 

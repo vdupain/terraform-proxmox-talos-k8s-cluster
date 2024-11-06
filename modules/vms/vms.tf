@@ -65,8 +65,8 @@ resource "proxmox_virtual_environment_vm" "vms" {
     datastore_id = each.value.datastore_id
     ip_config {
       ipv4 {
-        address = "${each.value.ip}/${var.cluster.cidr}"
-        gateway = var.cluster.gateway
+        address = var.cluster.network_dhcp == true ? "dhcp" : "${each.value.ip}/${var.cluster.cidr}"
+        gateway = var.cluster.network_dhcp == true ? null : var.cluster.gateway
       }
     }
   }
@@ -82,4 +82,9 @@ resource "proxmox_virtual_environment_vm" "vms" {
       xvga    = false
     }
   }
+}
+
+resource "time_sleep" "waiting_if_dhcp" {
+  depends_on      = [proxmox_virtual_environment_vm.vms]
+  create_duration = (var.cluster.network_dhcp == true) ? "10s" : "0s"
 }
