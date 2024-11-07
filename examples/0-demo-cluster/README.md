@@ -11,7 +11,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_talos-k8s-cluster"></a> [talos-k8s-cluster](#module\_talos-k8s-cluster) | vdupain/talos-k8s-cluster/proxmox | 1.0.0-rc8 |
+| <a name="module_talos-k8s-cluster"></a> [talos-k8s-cluster](#module\_talos-k8s-cluster) | vdupain/talos-k8s-cluster/proxmox | 1.0.0 |
 
 ## Resources
 
