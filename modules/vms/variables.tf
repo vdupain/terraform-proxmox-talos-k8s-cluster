@@ -34,7 +34,7 @@ variable "vms" {
     ram_dedicated  = number
     os_disk_size   = number
     data_disk_size = number
-    gpu            = optional(bool, false)
+    gpu            = optional(string)
   }))
 }
 

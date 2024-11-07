@@ -2,7 +2,7 @@
 
 export CONTROL_PLANE_IP=192.168.10.220
 export GPU_WORKER_IP=192.168.10.223
-export TALOSCONFIG="../output/talos-config.yaml"
+export TALOSCONFIG="output/talos-config.yaml"
 talosctl config endpoint $CONTROL_PLANE_IP
 talosctl config node $GPU_WORKER_IP
 talosctl read /proc/modules

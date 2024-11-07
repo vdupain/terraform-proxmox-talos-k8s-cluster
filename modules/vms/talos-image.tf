@@ -26,7 +26,7 @@ data "http" "schematic_nvidia_id" {
 }
 
 resource "proxmox_virtual_environment_download_file" "this" {
-  for_each = toset(distinct([for k, v in var.vms : "${v.host_node}_${v.gpu == true ? local.image_nvidia_id : local.image_id}"]))
+  for_each = toset(distinct([for k, v in var.vms : "${v.host_node}_${v.gpu != null ? local.image_nvidia_id : local.image_id}"]))
 
   node_name    = split("_", each.key)[0]
   content_type = "iso"

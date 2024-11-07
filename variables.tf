@@ -36,7 +36,7 @@ variable "vms" {
     os_disk_size   = number
     data_disk_size = number
     install_disk   = optional(string, "/dev/sda")
-    gpu            = optional(bool, false)
+    gpu            = optional(string)
   }))
 }
 
