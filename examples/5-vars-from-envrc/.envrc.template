@@ -1,0 +1,7 @@
+export PROXMOX_VE_USERNAME="user@pam"
+export PROXMOX_VE_PASSWORD="password"
+export PROXMOX_VE_SSH_USERNAME="username"
+export PROXMOX_VE_SSH_PASSWORD="password"
+export PROXMOX_VE_ENDPOINT="https://pve.domain"
+export PROXMOX_VE_INSECURE="true"
+export PROXMOX_VE_API_TOKEN="user@pve!terraform=secret"
