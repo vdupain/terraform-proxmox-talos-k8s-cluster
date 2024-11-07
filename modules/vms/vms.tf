@@ -40,7 +40,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     ssd          = true
     file_format  = "raw"
     size         = each.value.os_disk_size
-    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu == true ? local.image_nvidia_id : local.image_id}"].id
+    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
   }
 
   # data disk
@@ -72,11 +72,11 @@ resource "proxmox_virtual_environment_vm" "vms" {
   }
 
   dynamic "hostpci" {
-    for_each = each.value.gpu ? [1] : []
+    for_each = (each.value.gpu != null) ? [1] : []
     content {
       # Passthrough GPU
       device  = "hostpci0"
-      mapping = "nvidia_3060"
+      mapping = each.value.gpu
       pcie    = true
       rombar  = true
       xvga    = false

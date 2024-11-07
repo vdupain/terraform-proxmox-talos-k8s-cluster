@@ -13,6 +13,6 @@ variable "nodes" {
     machine_type = string
     ip           = string
     install_disk = optional(string, "/dev/sda")
-    gpu          = optional(bool, false)
+    gpu          = optional(string)
   }))
 }

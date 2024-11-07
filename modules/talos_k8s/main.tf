@@ -67,7 +67,7 @@ resource "talos_machine_configuration_apply" "worker-gpu" {
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
   for_each = {
     for k, v in var.nodes : k => v
-    if v.machine_type == "worker" && v.gpu == true
+    if v.machine_type == "worker" && v.gpu != null
   }
   node = each.value.ip
   config_patches = [

@@ -1,6 +1,6 @@
 module "talos-k8s-cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.0.0-rc7"
+  version = "1.0.0-rc8"
 
   cluster = {
     name     = "mini-cluster"
