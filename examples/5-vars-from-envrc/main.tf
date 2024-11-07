@@ -1,4 +1,4 @@
-module "talos-k8s-cluster" {
+module "talos_k8s_cluster" {
   #source  = "vdupain/talos-k8s-cluster/proxmox"
   #version = "1.0.0"
   source = "../.."

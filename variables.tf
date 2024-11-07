@@ -53,12 +53,12 @@ variable "pci" {
   default = null
 }
 
-variable "github" {
-  description = "Github Flux GitOps configuration"
+variable "gitops" {
+  description = "GitOps configuration"
   type = object({
-    token      = string
-    org        = string
-    repository = string
+    repository   = string
+    token        = string
+    cluster_name = string
   })
   default = null
 }
@@ -67,7 +67,7 @@ variable "certificate" {
   description = "Certificate for k8s sealed-secrets"
   type = object({
     cert = string
-    key = string
+    key  = string
   })
   default = null
 }
