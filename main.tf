@@ -32,11 +32,23 @@ module "talos_k8s" {
 
 
 }
+module "sealed-secrets" {
+  depends_on = [module.talos_k8s]
+  source     = "./modules/sealed-secrets"
+  count      = (var.certificate == null) ? 0 : 1
+
+  providers = {
+    kubernetes = kubernetes
+  }
+
+  certificate = var.certificate
+}
+
 
 module "fluxcd" {
-  count      = (var.github == null) ? 0 : 1
-  depends_on = [module.talos_k8s]
+  depends_on = [module.sealed-secrets]
   source     = "./modules/fluxcd"
+  count      = (var.github == null) ? 0 : 1
 
   cluster = {
     name = var.cluster.name

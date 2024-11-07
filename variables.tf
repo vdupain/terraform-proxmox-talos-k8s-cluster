@@ -62,3 +62,12 @@ variable "github" {
   })
   default = null
 }
+
+variable "certificate" {
+  description = "Certificate for k8s sealed-secrets"
+  type = object({
+    cert = string
+    key = string
+  })
+  default = null
+}
