@@ -11,7 +11,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_talos-k8s-cluster"></a> [talos-k8s-cluster](#module\_talos-k8s-cluster) | ../.. | n/a |
+| <a name="module_talos_k8s_cluster"></a> [talos\_k8s\_cluster](#module\_talos\_k8s\_cluster) | ../.. | n/a |
 
 ## Resources
 
@@ -21,7 +21,7 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_github"></a> [github](#input\_github) | Github configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | `null` | no |
+| <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = string<br/>    insecure  = bool<br/>    username  = string<br/>    password  = string<br/>    api_token = optional(string)<br/>  })</pre> | n/a | yes |
 
 ## Outputs

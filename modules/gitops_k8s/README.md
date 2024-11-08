@@ -26,8 +26,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name = string<br/>  })</pre> | n/a | yes |
-| <a name="input_github"></a> [github](#input\_github) | Github configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | n/a | yes |
+| <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
 
 ## Outputs
 

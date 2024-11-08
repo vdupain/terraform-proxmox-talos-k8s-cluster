@@ -186,9 +186,10 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_fluxcd"></a> [fluxcd](#module\_fluxcd) | ./modules/fluxcd | n/a |
+| <a name="module_gitops_k8s"></a> [gitops\_k8s](#module\_gitops\_k8s) | ./modules/gitops_k8s | n/a |
+| <a name="module_init_k8s"></a> [init\_k8s](#module\_init\_k8s) | ./modules/init_k8s | n/a |
 | <a name="module_talos_k8s"></a> [talos\_k8s](#module\_talos\_k8s) | ./modules/talos_k8s | n/a |
-| <a name="module_vms"></a> [vms](#module\_vms) | ./modules/vms | n/a |
+| <a name="module_vms_proxmox"></a> [vms\_proxmox](#module\_vms\_proxmox) | ./modules/vms_proxmox | n/a |
 
 ## Resources
 
@@ -201,8 +202,9 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_certificate"></a> [certificate](#input\_certificate) | Certificate for k8s sealed-secrets | <pre>object({<br/>    cert = string<br/>    key  = string<br/>  })</pre> | `null` | no |
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name          = string<br/>    talos_version = optional(string, "v1.8.2")<br/>    network_dhcp  = optional(bool, false)<br/>    gateway       = optional(string)<br/>    cidr          = optional(number)<br/>    vlan_id       = optional(number, null)<br/>    endpoint      = optional(string)<br/>  })</pre> | n/a | yes |
-| <a name="input_github"></a> [github](#input\_github) | Github Flux GitOps configuration | <pre>object({<br/>    token      = string<br/>    org        = string<br/>    repository = string<br/>  })</pre> | `null` | no |
+| <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint  = optional(string)<br/>    insecure  = optional(bool)<br/>    username  = optional(string)<br/>    password  = optional(string)<br/>    api_token = optional(string)<br/>    ssh_agent = optional(string, false)<br/>  })</pre> | n/a | yes |
 | <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = optional(string)<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = number<br/>    data_disk_size = number<br/>    install_disk   = optional(string, "/dev/sda")<br/>    gpu            = optional(string)<br/>  }))</pre> | n/a | yes |
