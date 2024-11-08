@@ -6,8 +6,8 @@ proxmox = {
   api_token    = "user@pve!terraform=secret"
 }
 
-github = {
-  token      = "github_pat"
-  org        = "username"
+gitops = {
   repository = "repository"
+  token      = "github_pat"
+  cluster_name = "cluster_name"
 }

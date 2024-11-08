@@ -22,7 +22,7 @@ Before running the module, you need to have an up and running Proxmox cluster co
 
 ```sh
 cat main.tf
-module "talos-k8s-cluster" {
+module "talos_k8s_cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
   version = "1.0.0-rc8"
 
@@ -74,10 +74,10 @@ module "talos-k8s-cluster" {
     api_token    = "user@pve!terraform=secret"
   }
 
-  github = {
-    token      = "github_pat"
-    org        = "username"
-    repository = "repository"
+  gitops = {
+    repository   = "https://github.com/vdupain/gitops.git"
+    token        = "github_pat"
+    cluster_name = "my-cluster"
   }
 
 }
@@ -88,9 +88,9 @@ terraform init
 ...
 terraform apply
 ...
-module.talos-k8s-cluster.module.fluxcd[0].flux_bootstrap_git.this: Still creating... [50s elapsed]
-module.talos-k8s-cluster.module.fluxcd[0].flux_bootstrap_git.this: Still creating... [1m0s elapsed]
-module.talos-k8s-cluster.module.fluxcd[0].flux_bootstrap_git.this: Creation complete after 1m0s [id=flux-system]
+module.talos_k8s_cluster.module.fluxcd[0].flux_bootstrap_git.this: Still creating... [50s elapsed]
+module.talos_k8s_cluster.module.fluxcd[0].flux_bootstrap_git.this: Still creating... [1m0s elapsed]
+module.talos_k8s_cluster.module.fluxcd[0].flux_bootstrap_git.this: Creation complete after 1m0s [id=flux-system]
 
 Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
 ```

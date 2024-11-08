@@ -1,5 +1,5 @@
-module "vms" {
-  source = "./modules/vms"
+module "vms_proxmox" {
+  source = "./modules/vms_proxmox"
 
   proxmox = var.proxmox
 
@@ -17,7 +17,7 @@ module "vms" {
 }
 
 module "talos_k8s" {
-  depends_on = [module.vms]
+  depends_on = [module.vms_proxmox]
   source     = "./modules/talos_k8s"
 
   cluster = {
@@ -27,20 +27,27 @@ module "talos_k8s" {
   }
 
   nodes = { for k, vm in var.vms : k => merge(vm, {
-    ip = lookup(module.vms.qemu_ipv4_addresses, k, vm.ip)
+    ip = lookup(module.vms_proxmox.qemu_ipv4_addresses, k, vm.ip)
   }) }
-
-
 }
 
-module "fluxcd" {
-  count      = (var.github == null) ? 0 : 1
+module "init_k8s" {
   depends_on = [module.talos_k8s]
-  source     = "./modules/fluxcd"
+  source     = "./modules/init_k8s"
+  count      = (var.certificate == null) ? 0 : 1
 
-  cluster = {
-    name = var.cluster.name
+  providers = {
+    kubernetes = kubernetes
   }
 
-  github = var.github
+  certificate = var.certificate
+}
+
+
+module "gitops_k8s" {
+  depends_on = [module.init_k8s]
+  source     = "./modules/gitops_k8s"
+  count      = (var.gitops == null) ? 0 : 1
+
+  gitops = var.gitops
 }
