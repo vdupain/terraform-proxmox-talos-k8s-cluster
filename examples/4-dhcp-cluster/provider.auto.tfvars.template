@@ -5,9 +5,3 @@ proxmox = {
   password     = "password"
   api_token    = "user@pve!terraform=secret"
 }
-
-github = {
-  token      = "github_pat"
-  org        = "username"
-  repository = "repository"
-}

@@ -10,12 +10,12 @@ variable "proxmox" {
   sensitive = true
 }
 
-variable "github" {
-  description = "Github configuration"
+variable "gitops" {
+  description = "GitOps configuration"
   type = object({
-    token      = string
-    org        = string
-    repository = string
+    repository   = string
+    token        = string
+    cluster_name = string
   })
   default = null
 }

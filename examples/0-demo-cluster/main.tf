@@ -1,6 +1,7 @@
-module "talos-k8s-cluster" {
-  source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.0.0"
+module "talos_k8s_cluster" {
+  #  source  = "vdupain/talos-k8s-cluster/proxmox"
+  #  version = "1.0.0"
+  source = "../.."
 
   cluster = {
     name     = "demo-cluster"
@@ -50,10 +51,10 @@ module "talos-k8s-cluster" {
     api_token = "user@pve!terraform=secret"
   }
 
-  github = {
-    token      = "github_pat"
-    org        = "username"
-    repository = "repository"
+  gitops = {
+    repository   = "https://github.com/vdupain/gitops.git"
+    token        = "github_pat"
+    cluster_name = "my-cluster"
   }
 
 }

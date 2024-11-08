@@ -1,16 +1,16 @@
 output "vm_ipv4_address_vms" {
   description = "Retrieves IPv4 address for a k8s Talos cluster"
-  value       = module.vms.vm_ipv4_address_vms
+  value       = module.vms_proxmox.vm_ipv4_address_vms
 }
 
 output "config_ipv4_addresses" {
   description = "Retrieves VM names with IPv4 address for a k8s Talos cluster"
-  value       = module.vms.config_ipv4_addresses
+  value       = module.vms_proxmox.config_ipv4_addresses
 }
 
 output "qemu_ipv4_addresses" {
   description = "Retrieves VM names with IPv4 address for a k8s Talos cluster"
-  value       = module.vms.qemu_ipv4_addresses
+  value       = module.vms_proxmox.qemu_ipv4_addresses
 }
 
 output "kube_config" {
