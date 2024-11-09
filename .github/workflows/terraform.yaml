@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init
@@ -24,7 +24,7 @@ jobs:
         run: terraform fmt -check -diff -recursive
 
       - name: Terraform Validate
-        run: terraform fmt -check -diff -recursive
+        run: terraform validate
 
       - name: Terraform Plan
         run: terraform plan -out tfplan
