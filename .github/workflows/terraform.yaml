@@ -30,11 +30,15 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check -diff -recursive
 
+      - name: Create terraform.tfvars
+        run: |
+          cp github-actions.tfvars terraform.tfvars
+          
       - name: Terraform Validate
-        run: terraform validate -var-file=github-actions.tfvars
+        run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out tfplan -var-file=github-actions.tfvars
+        run: terraform plan -out tfplan
 
       # - name: Terraform Apply
       #   if: ${{ github.ref == 'refs/heads/main' }}
