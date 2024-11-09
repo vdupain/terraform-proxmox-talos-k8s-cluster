@@ -1,0 +1,34 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check -diff -recursive
+
+      - name: Terraform Validate
+        run: terraform fmt -check -diff -recursive
+
+      - name: Terraform Plan
+        run: terraform plan -out tfplan
+
+      # - name: Terraform Apply
+      #   if: ${{ github.ref == 'refs/heads/main' }}
+      #   run: terraform apply tfplan
