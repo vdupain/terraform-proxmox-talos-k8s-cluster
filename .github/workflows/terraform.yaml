@@ -28,7 +28,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Format
-        run: terraform fmt -check -diff -recursive -var-file=github-actions.tfvars
+        run: terraform fmt -check -diff -recursive
 
       - name: Terraform Validate
         run: terraform validate -var-file=github-actions.tfvars
