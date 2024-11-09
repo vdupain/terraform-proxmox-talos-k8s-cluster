@@ -1,0 +1,35 @@
+  cluster = {
+    name         = "github-actions-cluster"
+    network_dhcp = true
+  }
+
+  vms = {
+    "cp-0" = {
+      host_node      = "pve1"
+      machine_type   = "controlplane"
+      cpu            = 4
+      ram_dedicated  = 8192
+      os_disk_size   = 10
+      data_disk_size = 10
+      datastore_id   = "local-lvm"
+    }
+  }
+
+  proxmox = {
+    # endpoint  = "https://dummy:8006"
+    # insecure  = true
+    # username  = "username"
+    # password  = "password"
+    # api_token = "terraform@pve!provider=api_token"
+  }
+
+#   certificate = {
+#     cert = file("../../output/my-tls.crt")
+#     key  = file("../../output/my-tls.key")
+#   }
+
+#   gitops = {
+#     repository   = "https://dummy"
+#     token        = "github_pat"
+#     cluster_name = "github-actions-cluster"
+#   }
