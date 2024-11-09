@@ -32,7 +32,7 @@ jobs:
 
       - name: Create terraform.tfvars
         run: |
-          cp github-actions.tfvars terraform.tfvars
+          cp github-actions.tfvars.template terraform.tfvars
           
       - name: Terraform Validate
         run: terraform validate
