@@ -9,6 +9,13 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: self-hosted
+    environment: pve0
+    env:
+      PROXMOX_VE_ENDPOINT: ${{vars.PROXMOX_VE_ENDPOINT}}
+      PROXMOX_VE_INSECURE: ${{vars.PROXMOX_VE_INSECURE}}
+      PROXMOX_VE_SSH_USERNAME: ${{secrets.PROXMOX_VE_SSH_USERNAME}}
+      PROXMOX_VE_SSH_PASSWORD: ${{secrets.PROXMOX_VE_SSH_PASSWORD}}
+      PROXMOX_VE_API_TOKEN: ${{secrets.PROXMOX_VE_API_TOKEN}}
 
     steps:
       - name: Checkout
@@ -21,13 +28,13 @@ jobs:
         run: terraform init
 
       - name: Terraform Format
-        run: terraform fmt -check -diff -recursive
+        run: terraform fmt -check -diff -recursive -var-file=github-actions.tfvars
 
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform validate -var-file=github-actions.tfvars
 
       - name: Terraform Plan
-        run: terraform plan -out tfplan
+        run: terraform plan -out tfplan -var-file=github-actions.tfvars
 
       # - name: Terraform Apply
       #   if: ${{ github.ref == 'refs/heads/main' }}
