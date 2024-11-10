@@ -24,4 +24,10 @@ module "talos_k8s_cluster" {
     # using env variables
   }
 
+  gitops = {
+    repository   = "https://github.com/vdupain/gitops.git"
+    token = var.github_pat
+    cluster_name = "vars-from-envrc-cluster"
+  }
+
 }

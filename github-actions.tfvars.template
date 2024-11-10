@@ -1,5 +1,5 @@
   cluster = {
-    name         = "github-actions-cluster"
+    name         = "cicd-cluster"
     network_dhcp = true
   }
 
@@ -16,11 +16,7 @@
   }
 
   proxmox = {
-    # endpoint  = "https://dummy:8006"
-    # insecure  = true
-    # username  = "username"
-    # password  = "password"
-    # api_token = "terraform@pve!provider=api_token"
+    # using env variables
   }
 
 #   certificate = {
@@ -28,8 +24,8 @@
 #     key  = file("../../output/my-tls.key")
 #   }
 
-#   gitops = {
-#     repository   = "https://dummy"
-#     token        = "github_pat"
-#     cluster_name = "github-actions-cluster"
-#   }
+  gitops = {
+     repository   = "https://github.com/vdupain/gitops.git"
+     token        = "$TF_VAR_GITHUB_PAT"
+     cluster_name = "cicd-cluster"
+  }
