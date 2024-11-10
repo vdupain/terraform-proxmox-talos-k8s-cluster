@@ -16,6 +16,7 @@ jobs:
       PROXMOX_VE_SSH_USERNAME: ${{secrets.PROXMOX_VE_SSH_USERNAME}}
       PROXMOX_VE_SSH_PASSWORD: ${{secrets.PROXMOX_VE_SSH_PASSWORD}}
       PROXMOX_VE_API_TOKEN: ${{secrets.PROXMOX_VE_API_TOKEN}}
+      TF_VAR_GITHUB_PAT: ${{secrets.TF_VAR_GITHUB_PAT}}
 
     steps:
       - name: Checkout
