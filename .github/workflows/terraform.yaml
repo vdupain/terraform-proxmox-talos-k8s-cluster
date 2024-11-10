@@ -40,6 +40,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out tfplan
 
-      # - name: Terraform Apply
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: terraform apply tfplan
+      - name: Terraform Apply
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: terraform apply tfplan
