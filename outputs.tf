@@ -37,6 +37,18 @@ resource "local_file" "kube_config" {
   file_permission = "0600"
 }
 
+resource "local_file" "kube_config_home" {
+  content         = module.talos_k8s.kube_config.kubeconfig_raw
+  filename        = pathexpand("~/.kube/${var.cluster.name}.yaml")
+  file_permission = "0600"
+}
+
+resource "local_file" "talos_config_home" {
+  content         = module.talos_k8s.talos_config.talos_config
+  filename        = pathexpand("~/.talos/${var.cluster.name}.yaml")
+  file_permission = "0600"
+}
+
 output "cluster_name" {
   description = "Retrieves the name for a k8s Talos cluster"
   value       = var.cluster.name
