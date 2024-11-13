@@ -102,10 +102,10 @@ data "talos_cluster_health" "this" {
     talos_machine_configuration_apply.worker,
     talos_machine_bootstrap.this
   ]
-  client_configuration = data.talos_client_configuration.this.client_configuration
-  control_plane_nodes  = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
-  worker_nodes         = [for k, v in var.nodes : v.ip if v.machine_type == "worker"]
-  endpoints            = data.talos_client_configuration.this.endpoints
+  client_configuration   = data.talos_client_configuration.this.client_configuration
+  control_plane_nodes    = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
+  worker_nodes           = [for k, v in var.nodes : v.ip if v.machine_type == "worker"]
+  endpoints              = data.talos_client_configuration.this.endpoints
   skip_kubernetes_checks = true
 
   timeouts = {
