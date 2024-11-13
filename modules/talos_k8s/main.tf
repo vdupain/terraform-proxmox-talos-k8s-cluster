@@ -62,7 +62,7 @@ resource "talos_machine_configuration_apply" "worker" {
   ]
 }
 
-resource "talos_machine_configuration_apply" "worker-gpu" {
+resource "talos_machine_configuration_apply" "worker_gpu" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
   for_each = {
@@ -95,7 +95,7 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
 }
 
-
+# tflint-ignore: terraform_unused_declarations
 data "talos_cluster_health" "this" {
   depends_on = [
     talos_machine_configuration_apply.controlplane,

@@ -1,3 +1,4 @@
 variable "github_pat" {
-  type = string
+  description = "Github Personal Access Token"
+  type        = string
 }
