@@ -1,18 +1,18 @@
-resource "kubernetes_namespace" "sealed-secrets" {
+resource "kubernetes_namespace" "sealed_secrets" {
   metadata {
     name = "sealed-secrets"
   }
   lifecycle {
     ignore_changes = [
-      metadata.0.labels["kustomize.toolkit.fluxcd.io/name"],
-      metadata.0.labels["kustomize.toolkit.fluxcd.io/namespace"],
-      metadata.0.labels["vector.dev/exclude"],
+      metadata[0].labels["kustomize.toolkit.fluxcd.io/name"],
+      metadata[0].labels["kustomize.toolkit.fluxcd.io/namespace"],
+      metadata[0].labels["vector.dev/exclude"],
     ]
   }
 }
 
-resource "kubernetes_secret" "sealed-secrets-key" {
-  depends_on = [kubernetes_namespace.sealed-secrets]
+resource "kubernetes_secret" "sealed_secrets_key" {
+  depends_on = [kubernetes_namespace.sealed_secrets]
   type       = "kubernetes.io/tls"
 
   metadata {
