@@ -7,6 +7,9 @@ machine:
   time:
     servers:
       - /dev/ptp0
+  kernel:
+    modules:
+      - name: zfs
 
 cluster:
   allowSchedulingOnControlPlanes: true
@@ -16,6 +19,9 @@ cluster:
   proxy:
     disabled: true
   inlineManifests:
+  - name: zfs-setup
+    contents: |
+      ${indent(6, zfs_setup)}
   - name: cilium-values
     contents: |
       ${indent(6, cilium_values)}
