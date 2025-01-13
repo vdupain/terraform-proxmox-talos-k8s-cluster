@@ -19,7 +19,7 @@ variable "cluster" {
     cidr          = number
     vlan_id       = optional(number, null)
     name          = string
-    talos_version = optional(string, "v1.8.2")
+    talos_version = optional(string, "v1.9.0")
   })
 }
 
