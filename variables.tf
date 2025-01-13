@@ -15,7 +15,7 @@ variable "cluster" {
   description = "Cluster configuration"
   type = object({
     name          = string
-    talos_version = optional(string, "v1.8.2")
+    talos_version = optional(string, "v1.9.0")
     network_dhcp  = optional(bool, false)
     gateway       = optional(string)
     cidr          = optional(number)
@@ -33,8 +33,8 @@ variable "vms" {
     ip             = optional(string)
     cpu            = number
     ram_dedicated  = number
-    os_disk_size   = number
-    data_disk_size = number
+    os_disk_size   = optional(number, 10)
+    data_disk_size = optional(number, 20)
     install_disk   = optional(string, "/dev/sda")
     gpu            = optional(string)
   }))

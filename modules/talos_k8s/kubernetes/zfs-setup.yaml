@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: zfs-setup
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: zfs
+  template:
+    metadata:
+      labels:
+        app: zfs
+    spec:
+      volumes:
+      - name: hostfs
+        hostPath:
+          path: /
+      containers:
+      - image: alpine
+        name: zfs-info
+        volumeMounts:
+        - name: hostfs
+          mountPath: /hostfs
+        securityContext:
+          privileged: true
+        command:
+        - sh
+        - -c
+        - |
+          while sleep 60; do
+            echo ----------------------------------------
+            date
+            chroot /hostfs/ zpool list
+            echo
+            chroot /hostfs zfs list -o name,logicalreferenced,logicalused,referenced,quota,available,compression,compressratio
+          done
+      initContainers:
+      - image: alpine
+        name: zfs-setup
+        volumeMounts:
+        - name: hostfs
+          mountPath: /hostfs
+        securityContext:
+          privileged: true
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          if ! chroot /hostfs zpool list zfspv-pool; then
+            DEV=/dev/sdb
+            echo "Creating zfspv-pool on $DEV."
+            chroot /hostfs zpool create -m /var/zfspv-pool -o ashift=12 -O refreservation=10G zfspv-pool "$DEV"
+          fi
