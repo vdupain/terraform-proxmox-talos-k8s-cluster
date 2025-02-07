@@ -37,7 +37,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     iothread     = true
     cache        = "writethrough"
     discard      = "on"
-    ssd          = true
+    # ssd          = true
     file_format  = "raw"
     size         = each.value.os_disk_size
     file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
@@ -50,7 +50,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     iothread     = true
     cache        = "writethrough"
     discard      = "on"
-    ssd          = true
+    # ssd          = true
     file_format  = "raw"
     size         = each.value.data_disk_size
   }
@@ -86,5 +86,5 @@ resource "proxmox_virtual_environment_vm" "vms" {
 
 resource "time_sleep" "waiting_if_dhcp" {
   depends_on      = [proxmox_virtual_environment_vm.vms]
-  create_duration = (var.cluster.network_dhcp == true) ? "10s" : "0s"
+  create_duration = (var.cluster.network_dhcp == true) ? "30s" : "0s"
 }
