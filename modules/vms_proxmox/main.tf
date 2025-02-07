@@ -38,9 +38,9 @@ resource "proxmox_virtual_environment_vm" "vms" {
     cache        = "writethrough"
     discard      = "on"
     # ssd          = true
-    file_format  = "raw"
-    size         = each.value.os_disk_size
-    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
+    file_format = "raw"
+    size        = each.value.os_disk_size
+    file_id     = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
   }
 
   # data disk
@@ -51,8 +51,8 @@ resource "proxmox_virtual_environment_vm" "vms" {
     cache        = "writethrough"
     discard      = "on"
     # ssd          = true
-    file_format  = "raw"
-    size         = each.value.data_disk_size
+    file_format = "raw"
+    size        = each.value.data_disk_size
   }
 
   boot_order = ["scsi0"]
