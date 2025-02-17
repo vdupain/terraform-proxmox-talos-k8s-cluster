@@ -3,13 +3,14 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_talos"></a> [talos](#requirement\_talos) | >=0.6.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
+| <a name="requirement_talos"></a> [talos](#requirement\_talos) | >=0.7.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_talos"></a> [talos](#provider\_talos) | >=0.6.0 |
+| <a name="provider_talos"></a> [talos](#provider\_talos) | >=0.7.0 |
 
 ## Modules
 
@@ -23,7 +24,7 @@ No modules.
 | [talos_machine_bootstrap.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_bootstrap) | resource |
 | [talos_machine_configuration_apply.controlplane](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
 | [talos_machine_configuration_apply.worker](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
-| [talos_machine_configuration_apply.worker-gpu](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
+| [talos_machine_configuration_apply.worker_gpu](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_configuration_apply) | resource |
 | [talos_machine_secrets.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/resources/machine_secrets) | resource |
 | [talos_client_configuration.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/client_configuration) | data source |
 | [talos_cluster_health.this](https://registry.terraform.io/providers/siderolabs/talos/latest/docs/data-sources/cluster_health) | data source |
@@ -41,6 +42,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | n/a |
-| <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | n/a |
+| <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | Kubernetes configuration file |
+| <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | Talos configuration file |
 <!-- END_TF_DOCS -->
