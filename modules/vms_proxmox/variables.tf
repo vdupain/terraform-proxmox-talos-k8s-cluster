@@ -1,12 +1,13 @@
 variable "proxmox" {
   description = "Proxmox configuration"
   type = object({
-    endpoint  = string
-    insecure  = bool
-    username  = string
-    password  = optional(string)
-    api_token = optional(string)
-    ssh_agent = optional(string, false)
+    endpoint      = string
+    insecure      = bool
+    username      = string
+    password      = optional(string)
+    api_token     = optional(string)
+    ssh_agent     = optional(string, false)
+    random_vm_ids = optional(string, false)
   })
   sensitive = true
 }
