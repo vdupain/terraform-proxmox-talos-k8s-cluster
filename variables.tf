@@ -1,12 +1,13 @@
 variable "proxmox" {
   description = "Proxmox configuration"
   type = object({
-    endpoint  = optional(string)
-    insecure  = optional(bool)
-    username  = optional(string)
-    password  = optional(string)
-    api_token = optional(string)
-    ssh_agent = optional(string, false)
+    endpoint      = optional(string)
+    insecure      = optional(bool)
+    username      = optional(string)
+    password      = optional(string)
+    api_token     = optional(string)
+    ssh_agent     = optional(string, false)
+    random_vm_ids = optional(string, false)
   })
   sensitive = true
 }
@@ -15,7 +16,7 @@ variable "cluster" {
   description = "Cluster configuration"
   type = object({
     name          = string
-    talos_version = optional(string, "v1.9.0")
+    talos_version = optional(string, "v1.9.4")
     network_dhcp  = optional(bool, false)
     gateway       = optional(string)
     cidr          = optional(number)
