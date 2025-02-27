@@ -15,12 +15,13 @@ variable "proxmox" {
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
-    network_dhcp  = optional(bool, false)
-    gateway       = string
-    cidr          = number
-    vlan_id       = optional(number, null)
-    name          = string
-    talos_version = optional(string, "v1.9.0")
+    network_dhcp          = optional(bool, false)
+    gateway               = string
+    cidr                  = number
+    vlan_id               = optional(number, null)
+    network_device_bridge = optional(string, "vmbr0")
+    name                  = string
+    talos_version         = optional(string, "v1.9.4")
   })
 }
 

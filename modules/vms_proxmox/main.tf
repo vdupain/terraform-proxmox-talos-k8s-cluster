@@ -26,7 +26,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
   }
 
   network_device {
-    bridge  = "vmbr0"
+    bridge  = var.cluster.network_device_bridge
     vlan_id = var.cluster.vlan_id
   }
 
