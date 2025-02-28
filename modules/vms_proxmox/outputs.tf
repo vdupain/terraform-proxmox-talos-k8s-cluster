@@ -18,6 +18,6 @@ output "qemu_ipv4_addresses" {
   depends_on  = [time_sleep.waiting_if_dhcp]
   value = {
     for vm in proxmox_virtual_environment_vm.vms : trimprefix(vm.name, "${var.cluster.name}-")
-    => try(element(vm.ipv4_addresses, index(vm.mac_addresses, vm.network_device[0].mac_address))[0], "?.?.?.?")
+    => element(vm.ipv4_addresses, index(vm.mac_addresses, vm.network_device[0].mac_address))[0]
   }
 }
