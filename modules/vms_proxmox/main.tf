@@ -86,5 +86,5 @@ resource "proxmox_virtual_environment_vm" "vms" {
 
 resource "time_sleep" "waiting_if_dhcp" {
   depends_on      = [proxmox_virtual_environment_vm.vms]
-  create_duration = (var.cluster.network_dhcp == true) ? "30s" : "0s"
+  create_duration = (var.cluster.network_dhcp == true) ? "60s" : "0s"
 }
