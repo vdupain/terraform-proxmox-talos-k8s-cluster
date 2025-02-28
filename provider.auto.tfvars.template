@@ -4,6 +4,9 @@ proxmox = {
   username     = "user"
   password     = "password"
   api_token    = "user@pve!terraform=secret"
+  random_vm_ids      = true
+  random_vm_id_start = 10000
+  random_vm_id_end   = 99999
 }
 
 github = {
