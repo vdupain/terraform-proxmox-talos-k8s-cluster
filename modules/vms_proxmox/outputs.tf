@@ -1,5 +1,6 @@
 output "vm_ipv4_address_vms" {
   description = "IPv4 addresses"
+  depends_on  = [time_sleep.waiting_if_dhcp]
   value = [
     for vm in proxmox_virtual_environment_vm.vms : vm.initialization[0].ip_config[0].ipv4[0].address
   ]
@@ -7,6 +8,7 @@ output "vm_ipv4_address_vms" {
 
 output "config_ipv4_addresses" {
   description = "IPv4 addresses"
+  depends_on  = [time_sleep.waiting_if_dhcp]
   value = {
     for vm in proxmox_virtual_environment_vm.vms : vm.name
     => vm.initialization[0].ip_config[0].ipv4[0].address
