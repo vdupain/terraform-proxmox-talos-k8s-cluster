@@ -30,10 +30,12 @@ spec:
         - -c
         - |
           while sleep 60; do
+            DEVICE=/dev/sdb
             echo ----------------------------------------
             date
             chroot /hostfs/ zpool list
-            echo
+            chroot /hostfs/ zpool online -e zfspv-pool "$DEVICE"
+            echo 
             chroot /hostfs zfs list -o name,logicalreferenced,logicalused,referenced,quota,available,compression,compressratio
           done
       initContainers:
@@ -50,7 +52,8 @@ spec:
         - |
           set -e
           if ! chroot /hostfs zpool list zfspv-pool; then
-            DEV=/dev/sdb
-            echo "Creating zfspv-pool on $DEV."
-            chroot /hostfs zpool create -m /var/zfspv-pool -o ashift=12 -O refreservation=10G zfspv-pool "$DEV"
+            DEVICE=/dev/sdb
+            echo "Creating zfspv-pool on $DEVICE."
+            chroot /hostfs zpool create -m /var/zfspv-pool -o ashift=12 -O refreservation=5G zfspv-pool "$DEVICE"
+            chroot /hostfs zpool set autoexpand=on zfspv-pool
           fi
