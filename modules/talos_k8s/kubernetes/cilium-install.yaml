@@ -76,9 +76,15 @@ spec:
         command:
           - cilium
           - install
-          - --version=v1.16.1
+          - --version=v1.17.1
           - --set
           - kubeProxyReplacement=true
+          - --set
+          - encryption.enabled=true
+          - --set
+          - encryption.type=wireguard
+          - --set
+          - encryption.nodeEncryption=true
           - --values
           - values.yaml
       volumes:
