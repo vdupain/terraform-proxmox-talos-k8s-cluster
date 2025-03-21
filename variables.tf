@@ -21,6 +21,8 @@ variable "cluster" {
     talos_version         = optional(string, "v1.9.4")
     network_dhcp          = optional(bool, false)
     gateway               = optional(string)
+    dns_domain            = optional(string)
+    dns_servers           = optional(list(string))
     cidr                  = optional(number)
     vlan_id               = optional(number, null)
     network_device_bridge = optional(string, "vmbr0")

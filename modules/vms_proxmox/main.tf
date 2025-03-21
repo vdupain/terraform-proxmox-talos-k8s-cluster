@@ -37,10 +37,9 @@ resource "proxmox_virtual_environment_vm" "vms" {
     iothread     = true
     cache        = "writethrough"
     discard      = "on"
-    # ssd          = true
-    file_format = each.value.disk_file_format
-    size        = each.value.os_disk_size
-    file_id     = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
+    file_format  = each.value.disk_file_format
+    size         = each.value.os_disk_size
+    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
   }
 
   # data disk
@@ -50,9 +49,8 @@ resource "proxmox_virtual_environment_vm" "vms" {
     iothread     = true
     cache        = "writethrough"
     discard      = "on"
-    # ssd          = true
-    file_format = each.value.disk_file_format
-    size        = each.value.data_disk_size
+    file_format  = each.value.disk_file_format
+    size         = each.value.data_disk_size
   }
 
   boot_order = ["scsi0"]
@@ -63,6 +61,12 @@ resource "proxmox_virtual_environment_vm" "vms" {
 
   initialization {
     datastore_id = each.value.datastore_id
+
+    dns {
+      domain  = var.cluster.dns_domain
+      servers = var.cluster.dns_servers
+    }
+
     ip_config {
       ipv4 {
         address = var.cluster.network_dhcp == true ? "dhcp" : "${each.value.ip}/${var.cluster.cidr}"
@@ -82,6 +86,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
       xvga    = false
     }
   }
+
 }
 
 resource "time_sleep" "waiting_if_dhcp" {

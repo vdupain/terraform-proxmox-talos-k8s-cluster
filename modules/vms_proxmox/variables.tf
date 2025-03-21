@@ -19,6 +19,8 @@ variable "cluster" {
   type = object({
     network_dhcp          = optional(bool, false)
     gateway               = string
+    dns_domain            = optional(string)
+    dns_servers           = optional(list(string))
     cidr                  = number
     vlan_id               = optional(number, null)
     network_device_bridge = optional(string, "vmbr0")
