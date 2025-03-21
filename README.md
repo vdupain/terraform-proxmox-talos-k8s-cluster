@@ -24,7 +24,7 @@ Before running the module, you need to have an up and running Proxmox cluster co
 cat main.tf
 module "talos_k8s_cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.2.0"
+  version = "1.5.0"
 
   cluster = {
     name     = "cluster-demo"
@@ -207,11 +207,11 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_certificate"></a> [certificate](#input\_certificate) | Certificate for k8s sealed-secrets | <pre>object({<br/>    cert = string<br/>    key  = string<br/>  })</pre> | `null` | no |
-| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                  = string<br/>    talos_version         = optional(string, "v1.9.4")<br/>    network_dhcp          = optional(bool, false)<br/>    gateway               = optional(string)<br/>    cidr                  = optional(number)<br/>    vlan_id               = optional(number, null)<br/>    network_device_bridge = optional(string, "vmbr0")<br/>    endpoint              = optional(string)<br/>  })</pre> | n/a | yes |
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                  = string<br/>    talos_version         = optional(string, "v1.9.4")<br/>    network_dhcp          = optional(bool, false)<br/>    gateway               = optional(string)<br/>    dns_domain            = optional(string)<br/>    dns_servers           = optional(list(string))<br/>    cidr                  = optional(number)<br/>    vlan_id               = optional(number, null)<br/>    network_device_bridge = optional(string, "vmbr0")<br/>    endpoint              = optional(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
-| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint      = optional(string)<br/>    insecure      = optional(bool)<br/>    username      = optional(string)<br/>    password      = optional(string)<br/>    api_token     = optional(string)<br/>    ssh_agent     = optional(string, false)<br/>    random_vm_ids = optional(string, false)<br/>  })</pre> | n/a | yes |
-| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node      = string<br/>    machine_type   = string<br/>    datastore_id   = optional(string, "local-lvm")<br/>    ip             = optional(string)<br/>    cpu            = number<br/>    ram_dedicated  = number<br/>    os_disk_size   = optional(number, 10)<br/>    data_disk_size = optional(number, 20)<br/>    install_disk   = optional(string, "/dev/sda")<br/>    gpu            = optional(string)<br/>  }))</pre> | n/a | yes |
+| <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint           = optional(string)<br/>    insecure           = optional(bool)<br/>    username           = optional(string)<br/>    password           = optional(string)<br/>    api_token          = optional(string)<br/>    ssh_agent          = optional(string, false)<br/>    random_vm_ids      = optional(string, false)<br/>    random_vm_id_start = optional(number, 1000)<br/>    random_vm_id_end   = optional(number, 2000)<br/>  })</pre> | n/a | yes |
+| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node        = string<br/>    machine_type     = string<br/>    datastore_id     = optional(string, "local-lvm")<br/>    ip               = optional(string)<br/>    cpu              = number<br/>    ram_dedicated    = number<br/>    os_disk_size     = optional(number, 10)<br/>    data_disk_size   = optional(number, 20)<br/>    install_disk     = optional(string, "/dev/sda")<br/>    disk_file_format = optional(string, "raw")<br/>    gpu              = optional(string)<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
 
