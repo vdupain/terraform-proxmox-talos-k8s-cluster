@@ -6,6 +6,8 @@ module "vms_proxmox" {
   cluster = {
     name                  = var.cluster.name
     gateway               = var.cluster.gateway
+    dns_domain            = var.cluster.dns_domain
+    dns_servers           = var.cluster.dns_servers
     cidr                  = var.cluster.cidr
     vlan_id               = var.cluster.vlan_id
     talos_version         = var.cluster.talos_version
