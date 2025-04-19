@@ -40,4 +40,4 @@ tests
 .envrc
 examples/**/.terraform.lock.hcl
 **/output/*
-my-clusters
+envs
