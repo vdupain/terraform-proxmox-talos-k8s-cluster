@@ -17,6 +17,7 @@ module "vms_proxmox" {
 
   vms = var.vms
   pci = var.pci
+  usb = var.usb
 }
 
 module "talos_k8s" {

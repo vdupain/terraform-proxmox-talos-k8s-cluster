@@ -87,6 +87,13 @@ resource "proxmox_virtual_environment_vm" "vms" {
     }
   }
 
+  dynamic "usb" {
+    for_each = (each.value.usb != null) ? [1] : []
+    content {
+      mapping = each.value.usb
+    }
+  }
+
 }
 
 resource "time_sleep" "waiting_if_dhcp" {

@@ -42,6 +42,7 @@ variable "vms" {
     data_disk_size   = number
     disk_file_format = optional(string, "raw")
     gpu              = optional(string)
+    usb              = optional(string)
   }))
 }
 
@@ -54,6 +55,17 @@ variable "pci" {
     node         = string
     path         = string
     subsystem_id = string
+  }))
+  default = null
+}
+
+variable "usb" {
+  description = "Mapping USB configuration"
+  type = map(object({
+    name         = string
+    id           = string
+    node         = string
+    path         = optional(string)
   }))
   default = null
 }
