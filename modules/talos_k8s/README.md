@@ -4,13 +4,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
-| <a name="requirement_talos"></a> [talos](#requirement\_talos) | >=0.7.1 |
+| <a name="requirement_talos"></a> [talos](#requirement\_talos) | >=0.8.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_talos"></a> [talos](#provider\_talos) | >=0.7.1 |
+| <a name="provider_talos"></a> [talos](#provider\_talos) | >=0.8.1 |
 
 ## Modules
 
