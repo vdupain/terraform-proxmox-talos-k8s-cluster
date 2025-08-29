@@ -25,7 +25,7 @@ variable "cluster" {
     vlan_id               = optional(number, null)
     network_device_bridge = optional(string, "vmbr0")
     name                  = string
-    talos_version         = optional(string, "v1.10.3")
+    talos_version         = string
   })
 }
 

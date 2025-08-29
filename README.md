@@ -8,11 +8,11 @@ Terraform module for creating a Kubernetes Cluster
 
 ## Prerequisites
 
-* [Proxmox Virtual Environment 8.4.1](<https://www.proxmox.com/en/>)
+* [Proxmox Virtual Environment 9.0](<https://www.proxmox.com/en/>)
 * [OpenTofu v1.9.0](<https://opentofu.org/>)
 * [Talos v1.10](<https://www.talos.dev/v1.9/introduction/getting-started/>)
 * [Kubernetes](<https://kubernetes.io/docs/reference/kubectl/>)
-* [fluxcd 2.4.0](<https://fluxcd.io/>)
+* [fluxcd 2.6.0](<https://fluxcd.io/>)
 
 Before running the module, you need to have an up and running Proxmox cluster configured for [Terraform](<https://registry.terraform.io/providers/bpg/proxmox/latest/docs>)
 
@@ -22,7 +22,7 @@ Before running the module, you need to have an up and running Proxmox cluster co
 cat main.tf
 module "talos_k8s_cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.6.0"
+  version = "1.7.0"
 
   cluster = {
     name     = "cluster-demo"
@@ -172,8 +172,8 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
-| <a name="requirement_flux"></a> [flux](#requirement\_flux) | >=1.6.1 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >=2.37.1 |
+| <a name="requirement_flux"></a> [flux](#requirement\_flux) | >=1.6.4 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >=2.38.0 |
 | <a name="requirement_local"></a> [local](#requirement\_local) | >=2.5.3 |
 
 ## Providers
@@ -205,7 +205,7 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_certificate"></a> [certificate](#input\_certificate) | Certificate for k8s sealed-secrets | <pre>object({<br/>    cert = string<br/>    key  = string<br/>  })</pre> | `null` | no |
-| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                  = string<br/>    talos_version         = optional(string, "v1.10.3")<br/>    network_dhcp          = optional(bool, false)<br/>    gateway               = optional(string)<br/>    dns_domain            = optional(string)<br/>    dns_servers           = optional(list(string))<br/>    cidr                  = optional(number)<br/>    vlan_id               = optional(number, null)<br/>    network_device_bridge = optional(string, "vmbr0")<br/>    endpoint              = optional(string)<br/>  })</pre> | n/a | yes |
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                  = string<br/>    talos_version         = optional(string, "v1.10.7")<br/>    network_dhcp          = optional(bool, false)<br/>    gateway               = optional(string)<br/>    dns_domain            = optional(string)<br/>    dns_servers           = optional(list(string))<br/>    cidr                  = optional(number)<br/>    vlan_id               = optional(number, null)<br/>    network_device_bridge = optional(string, "vmbr0")<br/>    endpoint              = optional(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint           = optional(string)<br/>    insecure           = optional(bool)<br/>    username           = optional(string)<br/>    password           = optional(string)<br/>    api_token          = optional(string)<br/>    ssh_agent          = optional(string, false)<br/>    random_vm_ids      = optional(string, false)<br/>    random_vm_id_start = optional(number, 1000)<br/>    random_vm_id_end   = optional(number, 2000)<br/>  })</pre> | n/a | yes |
