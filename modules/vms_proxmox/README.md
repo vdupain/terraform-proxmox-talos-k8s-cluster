@@ -5,7 +5,7 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
 | <a name="requirement_http"></a> [http](#requirement\_http) | >=3.5.0 |
-| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | >=0.85.1 |
+| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | >=0.93.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >=0.13.1 |
 
 ## Providers
@@ -13,7 +13,7 @@
 | Name | Version |
 |------|---------|
 | <a name="provider_http"></a> [http](#provider\_http) | >=3.5.0 |
-| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | >=0.85.1 |
+| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | >=0.93.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | >=0.13.1 |
 
 ## Modules
