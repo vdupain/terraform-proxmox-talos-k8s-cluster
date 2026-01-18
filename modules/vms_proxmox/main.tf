@@ -8,9 +8,9 @@ resource "proxmox_virtual_environment_vm" "vms" {
   on_boot = true
   started = true
 
+  bios          = "ovmf"
   machine       = "q35"
-  scsi_hardware = "virtio-scsi-single"
-  bios          = "seabios"
+  scsi_hardware = "virtio-scsi-pci"
 
   agent {
     enabled = true
@@ -30,13 +30,21 @@ resource "proxmox_virtual_environment_vm" "vms" {
     vlan_id = var.cluster.vlan_id
   }
 
+  # EFI disk
+  efi_disk {
+    datastore_id = each.value.datastore_id
+    file_format  = each.value.disk_file_format
+    type         = "4m"
+    # pre_enrolled_keys = true
+  }
+
   # boot disk
   disk {
     datastore_id = each.value.datastore_id
     interface    = "scsi0"
-    iothread     = true
     cache        = "writethrough"
     discard      = "on"
+    ssd          = "true"
     file_format  = each.value.disk_file_format
     size         = each.value.os_disk_size
     file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
@@ -46,9 +54,9 @@ resource "proxmox_virtual_environment_vm" "vms" {
   disk {
     datastore_id = each.value.datastore_id
     interface    = "scsi1"
-    iothread     = true
     cache        = "writethrough"
     discard      = "on"
+    ssd          = "true"
     file_format  = each.value.disk_file_format
     size         = each.value.data_disk_size
   }

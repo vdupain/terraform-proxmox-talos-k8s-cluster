@@ -5,3 +5,5 @@ customization:
       - siderolabs/nonfree-kmod-nvidia-production
       - siderolabs/qemu-guest-agent
       - siderolabs/zfs
+  secureboot:
+    includeWellKnownCertificates: true

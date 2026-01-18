@@ -3,3 +3,5 @@ customization:
     officialExtensions:
       - siderolabs/qemu-guest-agent
       - siderolabs/zfs
+  secureboot:
+    includeWellKnownCertificates: true
