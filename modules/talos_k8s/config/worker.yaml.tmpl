@@ -1,10 +1,19 @@
+---
+version: v1alpha1
 machine:
   install:
     disk: ${install_disk}
-# https://www.talos.dev/v1.7/talos-guides/configuration/time-sync/#additional-configuration
   time:
     servers:
       - /dev/ptp0
   kernel:
     modules:
       - name: zfs
+  features:
+    kubePrism:
+      enabled: true
+      port: 7445
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+auto: stable

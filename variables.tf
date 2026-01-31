@@ -17,17 +17,26 @@ variable "proxmox" {
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
-    name                  = string
-    talos_version         = optional(string, "v1.12.1")
-    network_dhcp          = optional(bool, false)
-    gateway               = optional(string)
-    dns_domain            = optional(string)
-    dns_servers           = optional(list(string))
-    cidr                  = optional(number)
-    vlan_id               = optional(number, null)
-    network_device_bridge = optional(string, "vmbr0")
-    endpoint              = optional(string)
+    name                               = string
+    talos_version                      = optional(string, "v1.12.1")
+    network_dhcp                       = optional(bool, false)
+    gateway                            = optional(string)
+    dns_domain                         = optional(string)
+    dns_servers                        = optional(list(string))
+    cidr                               = optional(number)
+    vlan_id                            = optional(number, null)
+    network_device_bridge              = optional(string, "vmbr0")
+    endpoint                           = optional(string)
+    allow_scheduling_on_control_planes = optional(bool, true)
+    vip_ip                             = optional(string)
+    vip_interface                      = optional(string, "eth0")
   })
+}
+
+variable "additional_extensions" {
+  description = "Additional Talos system extensions to include in all images (added to base + GPU-specific extensions defined in modules/vms_proxmox/schematics/)"
+  type        = list(string)
+  default     = []
 }
 
 variable "vms" {
@@ -35,7 +44,7 @@ variable "vms" {
   type = map(object({
     host_node        = string
     machine_type     = string
-    datastore_id     = optional(string, "local-lvm")
+    datastore_id     = optional(string)
     ip               = optional(string)
     cpu              = number
     ram_dedicated    = number
