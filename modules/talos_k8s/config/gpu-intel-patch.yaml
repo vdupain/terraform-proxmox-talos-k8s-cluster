@@ -1,0 +1,7 @@
+machine:
+  kernel:
+    modules:
+      # i915 is built-in to Talos kernel, but we can ensure it's loaded with params
+      - name: i915
+        parameters:
+          - enable_guc=3  # Enable GuC and HuC firmware loading

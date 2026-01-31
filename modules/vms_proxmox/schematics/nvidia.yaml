@@ -3,7 +3,3 @@ customization:
     officialExtensions:
       - siderolabs/nvidia-container-toolkit-production
       - siderolabs/nonfree-kmod-nvidia-production
-      - siderolabs/qemu-guest-agent
-      - siderolabs/zfs
-  secureboot:
-    includeWellKnownCertificates: true

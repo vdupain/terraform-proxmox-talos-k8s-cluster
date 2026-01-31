@@ -3,5 +3,5 @@ customization:
     officialExtensions:
       - siderolabs/qemu-guest-agent
       - siderolabs/zfs
-  secureboot:
-    includeWellKnownCertificates: true
+      - siderolabs/iscsi-tools
+      - siderolabs/util-linux-tools

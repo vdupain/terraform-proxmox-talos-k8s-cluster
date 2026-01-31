@@ -28,13 +28,13 @@ No modules.
 | [proxmox_virtual_environment_hardware_mapping_pci.pci](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_hardware_mapping_pci) | resource |
 | [proxmox_virtual_environment_vm.vms](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_vm) | resource |
 | [time_sleep.waiting_if_dhcp](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [http_http.schematic_id](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
-| [http_http.schematic_nvidia_id](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
+| [http_http.schematic](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_additional_extensions"></a> [additional\_extensions](#input\_additional\_extensions) | Additional Talos system extensions to include in all images (added to base + GPU-specific extensions) | `list(string)` | `[]` | no |
 | <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    network_dhcp          = optional(bool, false)<br/>    gateway               = string<br/>    dns_domain            = optional(string)<br/>    dns_servers           = optional(list(string))<br/>    cidr                  = number<br/>    vlan_id               = optional(number, null)<br/>    network_device_bridge = optional(string, "vmbr0")<br/>    name                  = string<br/>    talos_version         = string<br/>  })</pre> | n/a | yes |
 | <a name="input_pci"></a> [pci](#input\_pci) | Configuration mapping PCI | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint           = string<br/>    insecure           = bool<br/>    username           = string<br/>    password           = optional(string)<br/>    api_token          = optional(string)<br/>    ssh_agent          = optional(string, false)<br/>    random_vm_ids      = optional(string, false)<br/>    random_vm_id_start = optional(number, 1000)<br/>    random_vm_id_end   = optional(number, 2000)<br/>  })</pre> | n/a | yes |

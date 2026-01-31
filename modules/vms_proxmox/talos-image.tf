@@ -4,29 +4,75 @@ locals {
   arch        = "amd64"
   version     = var.cluster.talos_version
 
-  schematic    = file("${path.module}/schematic.yaml")
-  schematic_id = jsondecode(data.http.schematic_id.response_body)["id"]
-  image_id     = "${local.schematic_id}_${local.version}"
+  # Load schematic templates
+  schematic_templates = {
+    base   = yamldecode(file("${path.module}/schematics/base.yaml"))
+    nvidia = yamldecode(file("${path.module}/schematics/nvidia.yaml"))
+    intel  = yamldecode(file("${path.module}/schematics/intel.yaml"))
+  }
 
-  schematic_nvidia    = file("${path.module}/schematic-nvidia.yaml")
-  schematic_nvidia_id = jsondecode(data.http.schematic_nvidia_id.response_body)["id"]
-  image_nvidia_id     = "${local.schematic_nvidia_id}_${local.version}"
+  # Detect GPU type for each VM
+  vm_gpu_types = {
+    for k, v in var.vms : k => (
+      v.gpu == null ? "base" : (
+        can(regex("(?i)nvidia", v.gpu)) ? "nvidia" : (
+          can(regex("(?i)intel", v.gpu)) ? "intel" : "base"
+        )
+      )
+    )
+  }
+
+  # Unique GPU types actually used
+  used_gpu_types = toset(values(local.vm_gpu_types))
+
+  # Build merged extension lists for each GPU type
+  # Base extensions + GPU-specific extensions + additional extensions
+  extensions_by_type = {
+    for gpu_type in ["base", "nvidia", "intel"] : gpu_type => concat(
+      # Base extensions (always included)
+      local.schematic_templates.base.customization.systemExtensions.officialExtensions,
+      # GPU-specific extensions (if not base)
+      gpu_type != "base" ? local.schematic_templates[gpu_type].customization.systemExtensions.officialExtensions : [],
+      # Additional user-provided extensions
+      var.additional_extensions
+    )
+  }
+
+  # Generate schematics for each used GPU type
+  schematics = {
+    for gpu_type in local.used_gpu_types : gpu_type => yamlencode({
+      customization = {
+        systemExtensions = {
+          officialExtensions = local.extensions_by_type[gpu_type]
+        }
+        secureboot = {
+          includeWellKnownCertificates = true
+        }
+      }
+    })
+  }
+
+  # Schematic IDs for each GPU type
+  schematic_ids = {
+    for gpu_type in local.used_gpu_types : gpu_type => jsondecode(data.http.schematic[gpu_type].response_body)["id"]
+  }
+
+  # Image IDs for each GPU type
+  image_ids = {
+    for gpu_type in local.used_gpu_types : gpu_type => "${local.schematic_ids[gpu_type]}_${local.version}"
+  }
 }
 
-data "http" "schematic_id" {
-  url          = "${local.factory_url}/schematics"
-  method       = "POST"
-  request_body = local.schematic
-}
+data "http" "schematic" {
+  for_each = local.schematics
 
-data "http" "schematic_nvidia_id" {
   url          = "${local.factory_url}/schematics"
   method       = "POST"
-  request_body = local.schematic_nvidia
+  request_body = each.value
 }
 
 resource "proxmox_virtual_environment_download_file" "this" {
-  for_each = toset(distinct([for k, v in var.vms : "${v.host_node}_${v.gpu != null ? local.image_nvidia_id : local.image_id}"]))
+  for_each = toset(distinct([for k, v in var.vms : "${v.host_node}_${local.image_ids[local.vm_gpu_types[k]]}"]))
 
   node_name    = split("_", each.key)[0]
   content_type = "iso"
