@@ -8,6 +8,10 @@ module "talos_k8s_cluster" {
     gateway  = "192.168.10.1"
     cidr     = 24
     endpoint = "192.168.10.210"
+
+    # For HA control plane with VIP, see example 6-ha-vip-cluster
+    # vip_ip        = "192.168.10.200"  # Virtual IP for HA
+    # vip_interface = "eth0"            # VIP takes priority over endpoint
   }
 
   vms = {

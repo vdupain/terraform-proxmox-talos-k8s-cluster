@@ -1,42 +1,57 @@
-# NVIDA GPU
+# Talos
+
+## Provisioning a k8s cluster
 
 ```sh
-crane export ghcr.io/siderolabs/extensions:v1.7.1 | tar x -O image-digests | grep -E 'nvidia-container-toolkit|nvidia-open-gpu-kernel-modules'
-ghcr.io/siderolabs/nvidia-container-toolkit:535.129.03-v1.14.6@sha256:b66c197c3962fca5ddc4dccc62e51935b53e5dbdb84d254b046f0289d87cea42
-ghcr.io/siderolabs/nvidia-open-gpu-kernel-modules:535.129.03-v1.7.1@sha256:1250e7accfaf153c4dd470a08da9caca9cfa90a3357b4492d86c8cfba26bbc02
+terraform apply -auto-approve
+terraform output -raw kubeconfig > kubeconfig-talos-cluster
+terraform output -raw talosconfig > talosconfig-talos-cluster
+
+cp kubeconfig-talos-cluster $HOME/.kube/config
+k9s --kubeconfig kubeconfig-talos-cluster
 ```
 
-## OSS drivers
+And there you go!
+
+Basically, the Terraform provisioning for Talos is equivalent to these command line operations:
 
 ```sh
-docker run --rm -t -v $PWD/_out:/out -v /dev:/dev --privileged ghcr.io/siderolabs/imager:v1.7.1 nocloud \
-    --system-extension-image ghcr.io/siderolabs/nvidia-container-toolkit:535.129.03-v1.14.6@sha256:b66c197c3962fca5ddc4dccc62e51935b53e5dbdb84d254b046f0289d87cea42 \
-    --system-extension-image ghcr.io/siderolabs/nvidia-open-gpu-kernel-modules:535.129.03-v1.7.1@sha256:1250e7accfaf153c4dd470a08da9caca9cfa90a3357b4492d86c8cfba26bbc02 \
-    --extra-kernel-arg net.ifnames=0 --extra-kernel-arg=-console --extra-kernel-arg=console=ttyS1 --arch=amd64
+# generate Machine Configurations
+export CONTROL_PLANE_IP=192.168.10.220
+talosctl gen config talos-proxmox-cluster https://$CONTROL_PLANE_IP:6443 --output-dir _out --force
+
+# create Control Plane Node
+talosctl apply-config --insecure --nodes $CONTROL_PLANE_IP --file _out/controlplane.yaml
+talosctl apply-config --insecure --nodes 192.168.10.221 --file _out/controlplane.yaml
+
+# create Worker Node
+talosctl apply-config --insecure --nodes 192.168.10.233 --file _out/worker.yaml
+talosctl apply-config --insecure --nodes 192.168.10.234 --file _out/worker.yaml
+
+
+# using the Cluster
+export TALOSCONFIG="_out/talosconfig"
+talosctl config endpoint $CONTROL_PLANE_IP
+talosctl config node $CONTROL_PLANE_IP
+
+# bootstrap Etcd
+talosctl bootstrap
+
+# retrieve the kubeconfig
+talosctl kubeconfig .
 ```
 
-## Proprietary drivers
+## Using the cluster
 
 ```sh
-docker run --rm -t -v $PWD/_out:/out -v /dev:/dev --privileged ghcr.io/siderolabs/imager:v1.7.1 nocloud \
-    --system-extension-image ghcr.io/siderolabs/nvidia-container-toolkit:535.129.03-v1.14.6@sha256:b66c197c3962fca5ddc4dccc62e51935b53e5dbdb84d254b046f0289d87cea42 \
-    --system-extension-image ghcr.io/siderolabs/nonfree-kmod-nvidia:535.129.03-v1.7.1@sha256:ada00f51f2abf24287ac0dc1751c1dfbabc0ac498faacca764310bb9582da784 \
-    --extra-kernel-arg net.ifnames=0 --extra-kernel-arg=-console --extra-kernel-arg=console=ttyS1 --arch=amd64
-```
-
-## Talos Linux Image Factory
-
-Au lieu de contruire son image, il est possible d'utiliser <https://factory.talos.dev/> qui permet de générer des images avec des extensions
-
-```sh
-export CONTROL_PLANE_IP=192.168.10.210
-export GPU_WORKER_IP=192.168.10.213
+export CONTROL_PLANE_IP=192.168.10.220
+export WORKER_IP=192.168.10.226
 export TALOSCONFIG="talosconfig-talos-cluster"
 talosctl config endpoint $CONTROL_PLANE_IP
-talosctl config node $GPU_WORKER_IP
-talosctl patch mc --patch @files/gpu-worker-patch.yaml
-talosctl read /proc/modules
-talosctl get extensions
-talosctl read /proc/driver/nvidia/version
-talosctl patch mc --patch @files/nvidia-default-runtimeclass.yaml
+talosctl config node $WORKER_IP
 ```
+
+## Docs
+
+* <https://www.talos.dev/v1.7/talos-guides/install/virtualized-platforms/proxmox/>
+* <https://github.com/siderolabs/contrib/tree/main/examples/terraform/basic>

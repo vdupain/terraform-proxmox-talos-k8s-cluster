@@ -1,6 +1,6 @@
 # Talos
 
-## Provisionner un cluster k8s
+## Provisioning a k8s cluster
 
 ```sh
 terraform apply -auto-approve
@@ -11,9 +11,9 @@ cp kubeconfig-talos-cluster $HOME/.kube/config
 k9s --kubeconfig kubeconfig-talos-cluster
 ```
 
-Et voila !
+And there you go!
 
-En gros le provisionning Terraform pour Talos est l'équivalent de ceci en ligne de commande:
+Basically, the Terraform provisioning for Talos is equivalent to these command line operations:
 
 ```sh
 # generate Machine Configurations
@@ -41,7 +41,7 @@ talosctl bootstrap
 talosctl kubeconfig .
 ```
 
-## Utiliser le cluster
+## Using the cluster
 
 ```sh
 export CONTROL_PLANE_IP=192.168.10.220
