@@ -1,6 +1,6 @@
 module "talos_k8s_cluster" {
   #  source  = "vdupain/talos-k8s-cluster/proxmox"
-  #  version = "1.0.0"
+  #  version = "2.0.0"
   source = "../.."
 
   cluster = {
@@ -66,6 +66,18 @@ module "talos_k8s_cluster" {
     # }
 
   }
+
+
+  # GPU extensions are automatically included based on GPU type detection
+  # NVIDIA GPUs get: base + nvidia extensions (from schematics/)
+  # Intel GPUs get: base + intel extensions (from schematics/)
+  # Base nodes get: base extensions only
+  #
+  # Optional: Add additional extensions to all nodes
+  # additional_extensions = [
+  #   "siderolabs/intel-ucode",
+  #   "siderolabs/iscsi-tools"
+  # ]
 
   pci = {
     nvidia_3060 = {

@@ -1,10 +1,10 @@
 module "talos_k8s_cluster" {
   #  source  = "vdupain/talos-k8s-cluster/proxmox"
-  #  version = "1.0.0"
+  #  version = "2.0.0"
   source = "../.."
 
   cluster = {
-    name     = "demo-cluster"
+    name     = "bare-cluster"
     gateway  = "192.168.10.1"
     cidr     = 24
     endpoint = "192.168.10.210"
@@ -12,7 +12,7 @@ module "talos_k8s_cluster" {
 
   vms = {
     "k8s-cp-0" = {
-      host_node      = "pve"
+      host_node      = "pve1"
       machine_type   = "controlplane"
       ip             = "192.168.10.210"
       cpu            = 2
@@ -22,7 +22,7 @@ module "talos_k8s_cluster" {
       datastore_id   = "local-lvm"
     }
     "k8s-cp-1" = {
-      host_node      = "pve"
+      host_node      = "pve1"
       machine_type   = "controlplane"
       ip             = "192.168.10.211"
       cpu            = 2
@@ -32,7 +32,7 @@ module "talos_k8s_cluster" {
       datastore_id   = "local-lvm"
     }
     "k8s-cp-2" = {
-      host_node      = "pve"
+      host_node      = "pve1"
       machine_type   = "controlplane"
       ip             = "192.168.10.212"
       cpu            = 2
@@ -43,18 +43,5 @@ module "talos_k8s_cluster" {
     }
   }
 
-  proxmox = {
-    endpoint  = "https://pve.domain:8006"
-    insecure  = true
-    username  = "user"
-    password  = "password"
-    api_token = "user@pve!terraform=secret"
-  }
-
-  gitops = {
-    repository   = "https://github.com/vdupain/gitops.git"
-    token        = "github_pat"
-    cluster_name = "my-cluster"
-  }
-
+  proxmox = var.proxmox
 }

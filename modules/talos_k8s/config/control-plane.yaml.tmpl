@@ -1,21 +1,27 @@
+---
+version: v1alpha1
 machine:
   install:
     disk: ${install_disk}
-# https://www.talos.dev/v1.7/talos-guides/configuration/time-sync/#additional-configuration
   time:
     servers:
       - /dev/ptp0
   kernel:
     modules:
       - name: zfs
-
+  features:
+    kubePrism:
+      enabled: true
+      port: 7445
 cluster:
-  # allowSchedulingOnControlPlanes: true
+  allowSchedulingOnControlPlanes: ${allow_scheduling_on_control_planes}
+  # Cilium CNI
   network:
     cni:
       name: none
   proxy:
     disabled: true
+  # inline bootstrap manifests 
   inlineManifests:
   - name: zfs-setup
     contents: |
@@ -26,3 +32,14 @@ cluster:
   - name: cilium-bootstrap
     contents: |
       ${indent(6, cilium_install)}
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+auto: stable
+%{ if vip_ip != null ~}
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: ${vip_ip}
+link: ${vip_interface}
+%{ endif ~}

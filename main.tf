@@ -1,8 +1,6 @@
 module "vms_proxmox" {
-  source = "./modules/vms_proxmox"
-
+  source  = "./modules/vms_proxmox"
   proxmox = var.proxmox
-
   cluster = {
     name                  = var.cluster.name
     gateway               = var.cluster.gateway
@@ -15,8 +13,9 @@ module "vms_proxmox" {
     network_device_bridge = var.cluster.network_device_bridge
   }
 
-  vms = var.vms
-  pci = var.pci
+  additional_extensions = var.additional_extensions
+  vms                   = var.vms
+  pci                   = var.pci
 }
 
 module "talos_k8s" {
@@ -24,9 +23,12 @@ module "talos_k8s" {
   source     = "./modules/talos_k8s"
 
   cluster = {
-    name         = var.cluster.name
-    endpoint     = var.cluster.endpoint
-    network_dhcp = var.cluster.network_dhcp
+    name                               = var.cluster.name
+    endpoint                           = var.cluster.endpoint
+    network_dhcp                       = var.cluster.network_dhcp
+    allow_scheduling_on_control_planes = var.cluster.allow_scheduling_on_control_planes
+    vip_ip                             = var.cluster.vip_ip
+    vip_interface                      = var.cluster.vip_interface
   }
 
   nodes = { for k, vm in var.vms : k => merge(vm, {

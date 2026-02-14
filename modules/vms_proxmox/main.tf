@@ -47,7 +47,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     ssd          = "true"
     file_format  = each.value.disk_file_format
     size         = each.value.os_disk_size
-    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.gpu != null ? local.image_nvidia_id : local.image_id}"].id
+    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${local.image_ids[local.vm_gpu_types[each.key]]}"].id
   }
 
   # data disk
@@ -70,9 +70,12 @@ resource "proxmox_virtual_environment_vm" "vms" {
   initialization {
     datastore_id = each.value.datastore_id
 
-    dns {
-      domain  = var.cluster.dns_domain
-      servers = var.cluster.dns_servers
+    dynamic "dns" {
+      for_each = (var.cluster.dns_domain != null || var.cluster.dns_servers != null) ? [1] : []
+      content {
+        domain  = var.cluster.dns_domain
+        servers = var.cluster.dns_servers
+      }
     }
 
     ip_config {
@@ -93,6 +96,12 @@ resource "proxmox_virtual_environment_vm" "vms" {
       rombar  = true
       xvga    = false
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      initialization[0].dns[0]
+    ]
   }
 
 }

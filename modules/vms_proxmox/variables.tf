@@ -19,14 +19,20 @@ variable "cluster" {
   type = object({
     network_dhcp          = optional(bool, false)
     gateway               = string
-    dns_domain            = optional(string)
-    dns_servers           = optional(list(string))
+    dns_domain            = optional(string, null)
+    dns_servers           = optional(list(string), null)
     cidr                  = number
     vlan_id               = optional(number, null)
     network_device_bridge = optional(string, "vmbr0")
     name                  = string
     talos_version         = string
   })
+}
+
+variable "additional_extensions" {
+  description = "Additional Talos system extensions to include in all images (added to base + GPU-specific extensions)"
+  type        = list(string)
+  default     = []
 }
 
 variable "vms" {
