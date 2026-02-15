@@ -43,9 +43,9 @@ variable "vms" {
     datastore_id     = optional(string, "local-lvm")
     ip               = string
     cpu              = number
-    ram_dedicated    = number
-    os_disk_size     = number
-    data_disk_size   = number
+    memory_dedicated = number
+    system_disk_size = number
+    user_disk_size   = number
     disk_file_format = optional(string, "raw")
     gpu              = optional(string)
   }))
@@ -54,12 +54,13 @@ variable "vms" {
 variable "pci" {
   description = "Configuration mapping PCI"
   type = map(object({
-    name         = string
-    id           = string
-    iommu_group  = number
-    node         = string
-    path         = string
-    subsystem_id = string
+    name             = string
+    id               = string
+    iommu_group      = number
+    node             = string
+    path             = string
+    subsystem_id     = string
+    mediated_devices = optional(bool, false)
   }))
   default = null
 }

@@ -18,7 +18,7 @@ variable "cluster" {
   description = "Cluster configuration"
   type = object({
     name                               = string
-    talos_version                      = optional(string, "v1.12.1")
+    talos_version                      = optional(string, "v1.12.4")
     network_dhcp                       = optional(bool, false)
     gateway                            = optional(string)
     dns_domain                         = optional(string)
@@ -47,9 +47,9 @@ variable "vms" {
     datastore_id     = optional(string, "local-lvm")
     ip               = optional(string)
     cpu              = number
-    ram_dedicated    = number
-    os_disk_size     = optional(number, 10)
-    data_disk_size   = optional(number, 20)
+    memory_dedicated = number
+    system_disk_size = optional(number, 10)
+    user_disk_size   = optional(number, 20)
     install_disk     = optional(string, "/dev/sda")
     disk_file_format = optional(string, "raw")
     gpu              = optional(string)
@@ -59,12 +59,13 @@ variable "vms" {
 variable "pci" {
   description = "Mapping PCI configuration"
   type = map(object({
-    name         = string
-    id           = string
-    iommu_group  = number
-    node         = string
-    path         = string
-    subsystem_id = string
+    name             = string
+    id               = string
+    iommu_group      = number
+    node             = string
+    path             = string
+    subsystem_id     = string
+    mediated_devices = optional(bool, false)
   }))
   default = null
 }

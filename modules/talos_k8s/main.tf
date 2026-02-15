@@ -49,18 +49,6 @@ data "talos_client_configuration" "this" {
   nodes                = [for k, v in var.nodes : v.ip if v.machine_type == "worker"]
 }
 
-output "debug_cp_0_patch" {
-  value = templatefile("${path.module}/config/control-plane.yaml.tmpl", {
-    install_disk                       = var.nodes["cp-0"].install_disk
-    allow_scheduling_on_control_planes = var.cluster.allow_scheduling_on_control_planes
-    vip_ip                             = var.cluster.vip_ip
-    vip_interface                      = var.cluster.vip_interface
-    cilium_values                      = file("${path.module}/kubernetes/cilium-values.yaml")
-    cilium_install                     = file("${path.module}/kubernetes/cilium-install.yaml")
-    zfs_setup                          = file("${path.module}/kubernetes/zfs-setup.yaml")
-  })
-}
-
 resource "talos_machine_configuration_apply" "controlplane" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration

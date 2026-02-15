@@ -22,7 +22,7 @@ Before running the module, you need to have an up and running Proxmox cluster co
 cat main.tf
 module "talos_k8s_cluster" {
   source  = "vdupain/talos-k8s-cluster/proxmox"
-  version = "1.7.0"
+  version = "2.0.0"
 
   cluster = {
     name     = "cluster-demo"
@@ -37,9 +37,9 @@ module "talos_k8s_cluster" {
       machine_type   = "controlplane"
       ip             = "192.168.10.210"
       cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
+      memory_dedicated  = 4096
+      system_disk_size   = 10
+      user_disk_size = 10
       datastore_id   = "local-lvm"
     }
     "k8s-cp-1" = {
@@ -47,9 +47,9 @@ module "talos_k8s_cluster" {
       machine_type   = "controlplane"
       ip             = "192.168.10.211"
       cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
+      memory_dedicated  = 4096
+      system_disk_size   = 10
+      user_disk_size = 10
       datastore_id   = "local-lvm"
     }
     "k8s-cp-2" = {
@@ -57,9 +57,9 @@ module "talos_k8s_cluster" {
       machine_type   = "controlplane"
       ip             = "192.168.10.212"
       cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
+      memory_dedicated  = 4096
+      system_disk_size   = 10
+      user_disk_size = 10
       datastore_id   = "local-lvm"
     }
   }
@@ -206,11 +206,11 @@ flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: mai
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_extensions"></a> [additional\_extensions](#input\_additional\_extensions) | Additional Talos system extensions to include in all images (added to base + GPU-specific extensions defined in modules/vms\_proxmox/schematics/) | `list(string)` | `[]` | no |
 | <a name="input_certificate"></a> [certificate](#input\_certificate) | Certificate for k8s sealed-secrets | <pre>object({<br/>    cert = string<br/>    key  = string<br/>  })</pre> | `null` | no |
-| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                               = string<br/>    talos_version                      = optional(string, "v1.12.1")<br/>    network_dhcp                       = optional(bool, false)<br/>    gateway                            = optional(string)<br/>    dns_domain                         = optional(string)<br/>    dns_servers                        = optional(list(string))<br/>    cidr                               = optional(number)<br/>    vlan_id                            = optional(number, null)<br/>    network_device_bridge              = optional(string, "vmbr0")<br/>    endpoint                           = optional(string)<br/>    allow_scheduling_on_control_planes = optional(bool, true)<br/>    vip_ip                             = optional(string)<br/>    vip_interface                      = optional(string, "eth0")<br/>  })</pre> | n/a | yes |
+| <a name="input_cluster"></a> [cluster](#input\_cluster) | Cluster configuration | <pre>object({<br/>    name                               = string<br/>    talos_version                      = optional(string, "v1.12.4")<br/>    network_dhcp                       = optional(bool, false)<br/>    gateway                            = optional(string)<br/>    dns_domain                         = optional(string)<br/>    dns_servers                        = optional(list(string))<br/>    cidr                               = optional(number)<br/>    vlan_id                            = optional(number, null)<br/>    network_device_bridge              = optional(string, "vmbr0")<br/>    endpoint                           = optional(string)<br/>    allow_scheduling_on_control_planes = optional(bool, true)<br/>    vip_ip                             = optional(string)<br/>    vip_interface                      = optional(string, "eth0")<br/>  })</pre> | n/a | yes |
 | <a name="input_gitops"></a> [gitops](#input\_gitops) | GitOps configuration | <pre>object({<br/>    repository   = string<br/>    token        = string<br/>    cluster_name = string<br/>  })</pre> | `null` | no |
-| <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name         = string<br/>    id           = string<br/>    iommu_group  = number<br/>    node         = string<br/>    path         = string<br/>    subsystem_id = string<br/>  }))</pre> | `null` | no |
+| <a name="input_pci"></a> [pci](#input\_pci) | Mapping PCI configuration | <pre>map(object({<br/>    name             = string<br/>    id               = string<br/>    iommu_group      = number<br/>    node             = string<br/>    path             = string<br/>    subsystem_id     = string<br/>    mediated_devices = optional(bool, false)<br/>  }))</pre> | `null` | no |
 | <a name="input_proxmox"></a> [proxmox](#input\_proxmox) | Proxmox configuration | <pre>object({<br/>    endpoint           = optional(string)<br/>    insecure           = optional(bool)<br/>    username           = optional(string)<br/>    password           = optional(string)<br/>    api_token          = optional(string)<br/>    ssh_agent          = optional(string, false)<br/>    random_vm_ids      = optional(string, false)<br/>    random_vm_id_start = optional(number, 1000)<br/>    random_vm_id_end   = optional(number, 2000)<br/>  })</pre> | n/a | yes |
-| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node        = string<br/>    machine_type     = string<br/>    datastore_id     = optional(string, "local-lvm")<br/>    ip               = optional(string)<br/>    cpu              = number<br/>    ram_dedicated    = number<br/>    os_disk_size     = optional(number, 10)<br/>    data_disk_size   = optional(number, 20)<br/>    install_disk     = optional(string, "/dev/sda")<br/>    disk_file_format = optional(string, "raw")<br/>    gpu              = optional(string)<br/>  }))</pre> | n/a | yes |
+| <a name="input_vms"></a> [vms](#input\_vms) | VMs configuration | <pre>map(object({<br/>    host_node        = string<br/>    machine_type     = string<br/>    datastore_id     = optional(string, "local-lvm")<br/>    ip               = optional(string)<br/>    cpu              = number<br/>    memory_dedicated = number<br/>    system_disk_size = optional(number, 10)<br/>    user_disk_size   = optional(number, 20)<br/>    install_disk     = optional(string, "/dev/sda")<br/>    disk_file_format = optional(string, "raw")<br/>    gpu              = optional(string)<br/>  }))</pre> | n/a | yes |
 
 ## Outputs
 

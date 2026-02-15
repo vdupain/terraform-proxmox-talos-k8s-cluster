@@ -12,5 +12,5 @@ resource "proxmox_virtual_environment_hardware_mapping_pci" "pci" {
       subsystem_id = each.value.subsystem_id
     }
   ]
-  mediated_devices = false
+  mediated_devices = each.value.mediated_devices
 }

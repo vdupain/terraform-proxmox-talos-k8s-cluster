@@ -12,9 +12,9 @@
       machine_type   = "controlplane"
       ip             = "192.168.10.210"
       cpu            = 4
-      ram_dedicated  = 8192
-      os_disk_size   = 10
-      data_disk_size = 10
+      memory_dedicated  = 4096
+      system_disk_size   = 10
+      user_disk_size = 10
       datastore_id   = "local-lvm"
     }
   }

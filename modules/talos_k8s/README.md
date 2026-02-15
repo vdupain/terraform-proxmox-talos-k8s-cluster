@@ -41,7 +41,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_debug_cp_0_patch"></a> [debug\_cp\_0\_patch](#output\_debug\_cp\_0\_patch) | n/a |
 | <a name="output_kube_config"></a> [kube\_config](#output\_kube\_config) | Kubernetes configuration file |
 | <a name="output_talos_config"></a> [talos\_config](#output\_talos\_config) | Talos configuration file |
 <!-- END_TF_DOCS -->

@@ -22,7 +22,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
   }
 
   memory {
-    dedicated = each.value.ram_dedicated
+    dedicated = each.value.memory_dedicated
   }
 
   network_device {
@@ -38,7 +38,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     # pre_enrolled_keys = true
   }
 
-  # boot disk
+  # system disk
   disk {
     datastore_id = each.value.datastore_id
     interface    = "scsi0"
@@ -46,11 +46,11 @@ resource "proxmox_virtual_environment_vm" "vms" {
     discard      = "on"
     ssd          = "true"
     file_format  = each.value.disk_file_format
-    size         = each.value.os_disk_size
+    size         = each.value.system_disk_size
     file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${local.image_ids[local.vm_gpu_types[each.key]]}"].id
   }
 
-  # data disk
+  # user disk
   disk {
     datastore_id = each.value.datastore_id
     interface    = "scsi1"
@@ -58,7 +58,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     discard      = "on"
     ssd          = "true"
     file_format  = each.value.disk_file_format
-    size         = each.value.data_disk_size
+    size         = each.value.user_disk_size
   }
 
   boot_order = ["scsi0"]

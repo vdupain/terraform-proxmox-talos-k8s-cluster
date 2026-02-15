@@ -15,34 +15,34 @@ module "talos_k8s_cluster" {
 
   vms = {
     "k8s-cp-0" = {
-      host_node      = "pve"
-      machine_type   = "controlplane"
-      ip             = "192.168.10.210"
-      cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
+      host_node        = "pve"
+      machine_type     = "controlplane"
+      ip               = "192.168.10.210"
+      cpu              = 2
+      memory_dedicated = 4096
+      system_disk_size = 10
+      user_disk_size   = 10
+      datastore_id     = "local-lvm"
     }
     "k8s-cp-1" = {
-      host_node      = "pve"
-      machine_type   = "controlplane"
-      ip             = "192.168.10.211"
-      cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
+      host_node        = "pve"
+      machine_type     = "controlplane"
+      ip               = "192.168.10.211"
+      cpu              = 2
+      memory_dedicated = 4096
+      system_disk_size = 10
+      user_disk_size   = 10
+      datastore_id     = "local-lvm"
     }
     "k8s-cp-2" = {
-      host_node      = "pve"
-      machine_type   = "controlplane"
-      ip             = "192.168.10.212"
-      cpu            = 2
-      ram_dedicated  = 4096
-      os_disk_size   = 10
-      data_disk_size = 10
-      datastore_id   = "local-lvm"
+      host_node        = "pve"
+      machine_type     = "controlplane"
+      ip               = "192.168.10.212"
+      cpu              = 2
+      memory_dedicated = 4096
+      system_disk_size = 10
+      user_disk_size   = 10
+      datastore_id     = "local-lvm"
     }
   }
 
