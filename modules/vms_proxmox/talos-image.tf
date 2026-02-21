@@ -42,9 +42,6 @@ locals {
         systemExtensions = {
           officialExtensions = local.extensions_by_type[gpu_type]
         }
-        secureboot = {
-          includeWellKnownCertificates = true
-        }
       }
     })
   }
@@ -75,8 +72,8 @@ resource "proxmox_virtual_environment_download_file" "this" {
   content_type = "iso"
   datastore_id = "local"
 
-  file_name               = "${var.cluster.name}-talos-${split("_", each.key)[1]}-${split("_", each.key)[2]}-${local.platform}-${local.arch}-secureboot.img"
-  url                     = "${local.factory_url}/image/${split("_", each.key)[1]}/${split("_", each.key)[2]}/${local.platform}-${local.arch}-secureboot.raw.gz"
+  file_name               = "${var.cluster.name}-talos-${split("_", each.key)[1]}-${split("_", each.key)[2]}-${local.platform}-${local.arch}.img"
+  url                     = "${local.factory_url}/image/${split("_", each.key)[1]}/${split("_", each.key)[2]}/${local.platform}-${local.arch}.raw.gz"
   decompression_algorithm = "gz"
   overwrite               = false
 }
