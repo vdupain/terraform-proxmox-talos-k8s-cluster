@@ -3,15 +3,15 @@ terraform {
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">=3.0.1"
+      version = "~> 3.0"
     }
     flux = {
       source  = "fluxcd/flux"
-      version = ">=1.7.6"
+      version = "~> 1.7"
     }
     local = {
       source  = "hashicorp/local"
-      version = ">=2.6.2"
+      version = "~> 2.6"
     }
   }
 }
