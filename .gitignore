@@ -36,7 +36,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-tests
 .env
 .envrc
 examples/**/.terraform.lock.hcl
