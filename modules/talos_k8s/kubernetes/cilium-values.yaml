@@ -28,3 +28,7 @@ data:
         enabled: true
       ui:
         enabled: true
+    # prority 2, 1srt priority is opentelemetry ebpf
+    bpf:
+      tc:
+        priority: 2
