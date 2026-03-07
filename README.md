@@ -9,7 +9,7 @@ Terraform module for creating a Kubernetes Cluster
 ## Prerequisites
 
 * [Proxmox Virtual Environment 9.1](<https://www.proxmox.com/en/>)
-* [OpenTofu v1.9.0](<https://opentofu.org/>)
+* [Terraform >= 1.10](<https://developer.hashicorp.com/terraform>)
 * [Talos v1.12](<https://www.talos.dev/v1.9/introduction/getting-started/>)
 * [Kubernetes](<https://kubernetes.io/docs/reference/kubectl/>)
 * [fluxcd 2.6.0](<https://fluxcd.io/>)
@@ -82,8 +82,12 @@ module "talos_k8s_cluster" {
 ```
 
 ```sh
+# with Terraform
+terraform init
+terraform apply
+
+# with OpenTofu
 tofu init
-...
 tofu apply
 ...
 module.talos_k8s_cluster.module.fluxcd[0].flux_bootstrap_git.this: Still creating... [50s elapsed]
@@ -92,6 +96,8 @@ module.talos_k8s_cluster.module.fluxcd[0].flux_bootstrap_git.this: Creation comp
 
 Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
 ```
+
+> **Note:** Terraform native tests (`.tftest.hcl`) must be run with **Terraform >= 1.10** only — OpenTofu has known incompatibilities with mock providers.
 
 ## Using cluster
 
@@ -166,21 +172,60 @@ NAMESPACE  	NAME       	REVISION          	SUSPENDED	READY	MESSAGE
 flux-system	flux-system	main@sha1:5902d505	False    	True 	Applied revision: main@sha1:5902d505
 ```
 
+## Architecture
+
+The module is composed of four sub-modules executed in order:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Root Module                              │
+│                                                                 │
+│  ┌──────────────────┐       ┌──────────────────────────────┐   │
+│  │  vms_proxmox     │──────▶│       talos_k8s              │   │
+│  │  (required)      │       │       (required)             │   │
+│  │                  │       │                              │   │
+│  │ • Download Talos │       │ • Generate machine secrets   │   │
+│  │   image          │       │ • Apply Talos config to each │   │
+│  │ • Create VMs     │       │   controlplane / worker node │   │
+│  │ • PCI mappings   │       │ • Bootstrap etcd             │   │
+│  │   (optional)     │       │ • Retrieve kubeconfig        │   │
+│  └──────────────────┘       └──────────────┬───────────────┘   │
+│                                            │                   │
+│                          ┌─────────────────┴──────────────┐    │
+│                          │                                │    │
+│                ┌─────────▼────────┐          ┌────────────▼──┐ │
+│                │  gitops_k8s      │          │  init_k8s     │ │
+│                │  (optional)      │          │  (optional)   │ │
+│                │                  │          │               │ │
+│                │ • FluxCD         │          │ • Sealed      │ │
+│                │   bootstrap on   │          │   Secrets     │ │
+│                │   git repository │          │   certificate │ │
+│                └──────────────────┘          └───────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+| Module | Required | Description |
+|--------|:--------:|-------------|
+| `vms_proxmox` | yes | Downloads Talos OS image and provisions VMs on Proxmox |
+| `talos_k8s` | yes | Configures Talos OS, bootstraps Kubernetes, retrieves kubeconfig |
+| `gitops_k8s` | no | Bootstraps FluxCD on a git repository (enabled when `gitops != null`) |
+| `init_k8s` | no | Installs Sealed Secrets certificate in the cluster (enabled when `certificate != null`) |
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
-| <a name="requirement_flux"></a> [flux](#requirement\_flux) | >=1.7.6 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >=3.0.1 |
-| <a name="requirement_local"></a> [local](#requirement\_local) | >=2.6.2 |
+| <a name="requirement_flux"></a> [flux](#requirement\_flux) | ~> 1.7 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 3.0 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.6 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_local"></a> [local](#provider\_local) | >=2.6.2 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.7.0 |
 
 ## Modules
 
