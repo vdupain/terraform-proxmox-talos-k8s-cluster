@@ -4,17 +4,17 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8 |
-| <a name="requirement_http"></a> [http](#requirement\_http) | ~> 3.5 |
-| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | ~> 0.95 |
-| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.13 |
+| <a name="requirement_http"></a> [http](#requirement\_http) | ~> 3.6 |
+| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | ~> 0.111 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.14 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_http"></a> [http](#provider\_http) | 3.5.0 |
-| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | 0.98.0 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.13.1 |
+| <a name="provider_http"></a> [http](#provider\_http) | 3.6.0 |
+| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | 0.111.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.14.0 |
 
 ## Modules
 
@@ -24,8 +24,8 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [proxmox_virtual_environment_download_file.this](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_download_file) | resource |
-| [proxmox_virtual_environment_hardware_mapping_pci.pci](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_hardware_mapping_pci) | resource |
+| [proxmox_download_file.this](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/download_file) | resource |
+| [proxmox_hardware_mapping_pci.pci](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/hardware_mapping_pci) | resource |
 | [proxmox_virtual_environment_vm.vms](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_vm) | resource |
 | [time_sleep.waiting_if_dhcp](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [http_http.schematic](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
@@ -45,6 +45,6 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_config_ipv4_addresses"></a> [config\_ipv4\_addresses](#output\_config\_ipv4\_addresses) | IPv4 addresses |
-| <a name="output_qemu_ipv4_addresses"></a> [qemu\_ipv4\_addresses](#output\_qemu\_ipv4\_addresses) | Qemu IPv4 addresses |
+| <a name="output_qemu_ipv4_addresses"></a> [qemu\_ipv4\_addresses](#output\_qemu\_ipv4\_addresses) | Qemu IPv4 addresses (excludes loopback) |
 | <a name="output_vm_ipv4_address_vms"></a> [vm\_ipv4\_address\_vms](#output\_vm\_ipv4\_address\_vms) | IPv4 addresses |
 <!-- END_TF_DOCS -->

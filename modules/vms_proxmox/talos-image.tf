@@ -65,7 +65,7 @@ data "http" "schematic" {
   request_body = each.value
 }
 
-resource "proxmox_virtual_environment_download_file" "this" {
+resource "proxmox_download_file" "this" {
   for_each = toset(distinct([for k, v in var.vms : "${v.host_node}_${local.image_ids[local.vm_gpu_types[k]]}"]))
 
   node_name    = split("_", each.key)[0]
@@ -76,4 +76,5 @@ resource "proxmox_virtual_environment_download_file" "this" {
   url                     = "${local.factory_url}/image/${split("_", each.key)[1]}/${split("_", each.key)[2]}/${local.platform}-${local.arch}.raw.gz"
   decompression_algorithm = "gz"
   overwrite               = false
+  overwrite_unmanaged     = true
 }

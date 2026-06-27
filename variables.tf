@@ -18,7 +18,7 @@ variable "cluster" {
   description = "Cluster configuration"
   type = object({
     name                               = string
-    talos_version                      = optional(string, "v1.12.4")
+    talos_version                      = optional(string, "v1.13.4")
     network_dhcp                       = optional(bool, false)
     gateway                            = optional(string)
     dns_domain                         = optional(string)

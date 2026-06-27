@@ -5,17 +5,18 @@
 mock_provider "proxmox" {
   mock_resource "proxmox_virtual_environment_vm" {
     defaults = {
-      ipv4_addresses = [["192.168.1.10"]]
-      mac_addresses  = ["AA:BB:CC:DD:EE:FF"]
-      network_device = [{ mac_address = "AA:BB:CC:DD:EE:FF" }]
+      ipv4_addresses          = [["127.0.0.1"], ["192.168.1.10"]]
+      mac_addresses           = ["AA:BB:CC:DD:EE:FF"]
+      network_device          = [{ mac_address = "AA:BB:CC:DD:EE:FF" }]
+      network_interface_names = ["lo", "eth0"]
     }
   }
-  mock_resource "proxmox_virtual_environment_download_file" {
+  mock_resource "proxmox_download_file" {
     defaults = {
       id = "local:iso/test.img"
     }
   }
-  mock_resource "proxmox_virtual_environment_hardware_mapping_pci" {}
+  mock_resource "proxmox_hardware_mapping_pci" {}
 }
 
 mock_provider "talos" {

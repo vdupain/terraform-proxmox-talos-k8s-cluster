@@ -14,10 +14,17 @@ output "config_ipv4_addresses" {
 }
 
 output "qemu_ipv4_addresses" {
-  description = "Qemu IPv4 addresses"
+  description = "Qemu IPv4 addresses (excludes loopback)"
   depends_on  = [time_sleep.waiting_if_dhcp]
   value = {
     for vm in proxmox_virtual_environment_vm.vms : trimprefix(vm.name, "${var.cluster.name}-")
-    => element(vm.ipv4_addresses, index(vm.mac_addresses, vm.network_device[0].mac_address))[0]
+    => try(
+      # Use network_interface_names to find the first non-loopback interface with an IP
+      [for i, name in vm.network_interface_names : vm.ipv4_addresses[i][0] if !startswith(name, "lo") && length(vm.ipv4_addresses[i]) > 0][0],
+      # Fallback: flatten all IPs and pick the first non-127.0.0.1
+      [for addr in flatten(vm.ipv4_addresses) : addr if !startswith(addr, "127.")][0],
+      # Last resort: original mac_addresses-based lookup
+      element(vm.ipv4_addresses, index(vm.mac_addresses, vm.mac_addresses[0]))[0]
+    )
   }
 }

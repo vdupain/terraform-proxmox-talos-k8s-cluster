@@ -14,6 +14,10 @@ resource "proxmox_virtual_environment_vm" "vms" {
 
   agent {
     enabled = true
+    wait_for_ip {
+      disabled = false
+      ipv4     = true
+    }
   }
 
   cpu {
@@ -47,7 +51,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
     ssd          = "true"
     file_format  = each.value.disk_file_format
     size         = each.value.system_disk_size
-    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${local.image_ids[local.vm_gpu_types[each.key]]}"].id
+    file_id      = proxmox_download_file.this["${each.value.host_node}_${local.image_ids[local.vm_gpu_types[each.key]]}"].id
   }
 
   # user disk
