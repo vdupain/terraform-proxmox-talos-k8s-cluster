@@ -5,17 +5,18 @@
 mock_provider "proxmox" {
   mock_resource "proxmox_virtual_environment_vm" {
     defaults = {
-      ipv4_addresses = [["192.168.1.10"]]
-      mac_addresses  = ["AA:BB:CC:DD:EE:FF"]
-      network_device = [{ mac_address = "AA:BB:CC:DD:EE:FF" }]
+      ipv4_addresses          = [["127.0.0.1"], ["192.168.1.10"]]
+      mac_addresses           = ["AA:BB:CC:DD:EE:FF"]
+      network_device          = [{ mac_address = "AA:BB:CC:DD:EE:FF" }]
+      network_interface_names = ["lo", "eth0"]
     }
   }
-  mock_resource "proxmox_virtual_environment_download_file" {
+  mock_resource "proxmox_download_file" {
     defaults = {
       id = "local:iso/test.img"
     }
   }
-  mock_resource "proxmox_virtual_environment_hardware_mapping_pci" {}
+  mock_resource "proxmox_hardware_mapping_pci" {}
 }
 
 mock_provider "http" {
@@ -42,7 +43,7 @@ variables {
     name          = "my-cluster"
     gateway       = "192.168.1.1"
     cidr          = 24
-    talos_version = "v1.12.4"
+    talos_version = "v1.13.4"
   }
   vms = {
     "cp-0" = {
@@ -165,7 +166,7 @@ run "dhcp_networking_sets_address_to_dhcp" {
       network_dhcp  = true
       gateway       = "192.168.1.1"
       cidr          = 24
-      talos_version = "v1.12.4"
+      talos_version = "v1.13.4"
     }
   }
 
@@ -182,7 +183,7 @@ run "no_pci_mapping_when_pci_is_null" {
   command = plan
 
   assert {
-    condition     = length(proxmox_virtual_environment_hardware_mapping_pci.pci) == 0
+    condition     = length(proxmox_hardware_mapping_pci.pci) == 0
     error_message = "No PCI mapping resources should be created when pci input is null"
   }
 }
@@ -206,12 +207,12 @@ run "pci_mappings_created_per_entry" {
   }
 
   assert {
-    condition     = length(proxmox_virtual_environment_hardware_mapping_pci.pci) == 1
+    condition     = length(proxmox_hardware_mapping_pci.pci) == 1
     error_message = "One PCI mapping resource should be created per pci entry"
   }
 
   assert {
-    condition     = proxmox_virtual_environment_hardware_mapping_pci.pci["gpu-0"].name == "nvidia-rtx4090"
+    condition     = proxmox_hardware_mapping_pci.pci["gpu-0"].name == "nvidia-rtx4090"
     error_message = "PCI mapping name should match the configured name"
   }
 }

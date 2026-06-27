@@ -14,7 +14,7 @@ module "talos_k8s_cluster" {
     # endpoint = "192.168.10.200" # Not needed - VIP is used as endpoint
 
     allow_scheduling_on_control_planes = false # Dedicated control plane nodes
-    talos_version                      = "v1.12.4"
+    talos_version                      = "v1.13.4"
   }
 
   # HA Control Plane - 3 nodes for quorum

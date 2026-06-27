@@ -3,15 +3,15 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "~> 0.95"
+      version = "~> 0.111"
     }
     time = {
       source  = "hashicorp/time"
-      version = "~> 0.13"
+      version = "~> 0.14"
     }
     http = {
       source  = "hashicorp/http"
-      version = "~> 3.5"
+      version = "~> 3.6"
     }
   }
 }
