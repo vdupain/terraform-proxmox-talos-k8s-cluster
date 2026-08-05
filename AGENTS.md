@@ -33,6 +33,20 @@ Execution order (enforced by `depends_on`):
 - **`modules/init_k8s`** — Optional; runs if `certificate != null`. Installs sealed-secrets TLS cert.
 - **`modules/gitops_k8s`** — Optional; runs if `gitops != null`. `flux_bootstrap_git`.
 
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live on GitHub Issues (`gh` CLI). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Triage labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
 ## Cluster endpoint priority (`modules/talos_k8s/main.tf`)
 1. `vip_ip` (HA Virtual IP)
 2. `cluster.endpoint` (explicit)
