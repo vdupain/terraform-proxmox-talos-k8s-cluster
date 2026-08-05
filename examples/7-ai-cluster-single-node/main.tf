@@ -17,8 +17,8 @@ module "talos_k8s_cluster" {
       ip               = "192.168.10.203"
       cpu              = 8
       memory_dedicated = 16384
-      system_disk_size = 40
-      user_disk_size   = 100
+      system_disk_size = 20
+      user_disk_size   = 20
       datastore_id     = "local-lvm"
       gpu              = "nvidia_3060"
     }
