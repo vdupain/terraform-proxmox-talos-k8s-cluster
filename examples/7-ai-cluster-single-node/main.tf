@@ -7,7 +7,7 @@ module "talos_k8s_cluster" {
     name     = "ai-cluster"
     gateway  = "192.168.10.1"
     cidr     = 24
-    endpoint = "192.168.10.217"
+    endpoint = "192.168.10.203"
   }
 
   vms = {
@@ -19,7 +19,7 @@ module "talos_k8s_cluster" {
       memory_dedicated = 16384
       system_disk_size = 20
       user_disk_size   = 20
-      datastore_id     = "local-lvm"
+      datastore_id     = "local-zfs"
       gpu              = "nvidia_3060"
     }
   }
@@ -34,7 +34,7 @@ module "talos_k8s_cluster" {
       id           = "10de:2503"
       iommu_group  = 2
       node         = "pve3"
-      path         = "0000:bd:00.0"
+      path         = "0000:b3:00.0"
       subsystem_id = "10de:1522"
     }
   }
