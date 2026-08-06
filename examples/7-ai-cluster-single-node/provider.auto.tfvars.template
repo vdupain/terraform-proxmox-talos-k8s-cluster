@@ -1,0 +1,7 @@
+proxmox = {
+  endpoint     = "https://pve.domain"
+  insecure     = true
+  username     = "user"
+  password     = "password"
+  api_token    = "user@pve!terraform=secret"
+}
