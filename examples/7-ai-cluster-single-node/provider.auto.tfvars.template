@@ -5,3 +5,9 @@ proxmox = {
   password     = "password"
   api_token    = "user@pve!terraform=secret"
 }
+
+gitops = {
+  repository   = "https://github.com/vdupain/gitops-k8s.git"
+  token        = "github_pat"
+  cluster_name = "ai-cluster"
+}
