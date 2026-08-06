@@ -29,7 +29,6 @@ AI_CLUSTER_KUBECONFIG="${AI_CLUSTER_KUBECONFIG:-output/kube-config.yaml}"
 
 log()  { printf '[ai-cluster-up] %s\n' "$*"; }
 fail() { printf '[ai-cluster-up] ERROR: %s\n' "$*" >&2; exit 1; }
-
 # --- 1. Send Wake-on-LAN magic packet (no Proxmox API needed) ---------------
 send_wol() {
   log "Sending WoL to pve3 (MAC ${AI_CLUSTER_PVE3_MAC}, broadcast ${AI_CLUSTER_BROADCAST})"
@@ -48,18 +47,18 @@ PY
   log "WoL packet sent"
 }
 
-# --- 2. Wait for the VM to become reachable (SSH port 22 on the node IP) ----
+# --- 2. Wait for the VM to become reachable (Talos apid port 50000) ---------
 wait_for_boot() {
   log "Waiting for ai-cluster to boot (up to ${AI_CLUSTER_WAIT_SEC}s)"
   local deadline=$(( $(date +%s) + AI_CLUSTER_WAIT_SEC ))
   while (( $(date +%s) < deadline )); do
-    if nc -z -w 2 "$AI_CLUSTER_NODE_IP" 22 2>/dev/null; then
-      log "VM reachable on ${AI_CLUSTER_NODE_IP}:22"
+    if nc -z -w 2 "$AI_CLUSTER_NODE_IP" 50000 2>/dev/null; then
+      log "VM reachable on ${AI_CLUSTER_NODE_IP}:50000"
       return 0
     fi
     sleep 5
   done
-  fail "Timed out waiting for ai-cluster to boot (${AI_CLUSTER_NODE_IP}:22 not reachable)"
+  fail "Timed out waiting for ai-cluster to boot (${AI_CLUSTER_NODE_IP}:50000 not reachable)"
 }
 
 # --- 3. Verify nodes report Ready -------------------------------------------

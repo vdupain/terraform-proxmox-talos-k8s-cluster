@@ -22,7 +22,7 @@
 set -euo pipefail
 
 AI_CLUSTER_TALOSCONFIG="${AI_CLUSTER_TALOSCONFIG:-output/talos-config.yaml}"
-AI_CLUSTER_NODE_IP="${AI_CLUSTER_NODE_IP:-192.168.10.203}"
+AI_CLUSTER_NODE_NAME="${AI_CLUSTER_NODE_NAME:-ai-cluster-cp-0}"
 AI_CLUSTER_KUBECONFIG="${AI_CLUSTER_KUBECONFIG:-output/kube-config.yaml}"
 
 log()  { printf '[ai-cluster-down] %s\n' "$*"; }
@@ -30,9 +30,9 @@ fail() { printf '[ai-cluster-down] ERROR: %s\n' "$*" >&2; exit 1; }
 
 # --- 1. Cordon the node (stop scheduling new workloads) ----------------------
 cordon_node() {
-  log "Cordoning node ${AI_CLUSTER_NODE_IP}"
-  if kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" get node "$AI_CLUSTER_NODE_IP" -o name >/dev/null 2>&1; then
-    kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" cordon "$AI_CLUSTER_NODE_IP"
+  log "Cordoning node ${AI_CLUSTER_NODE_NAME}"
+  if kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" get node "$AI_CLUSTER_NODE_NAME" -o name >/dev/null 2>&1; then
+    kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" cordon "$AI_CLUSTER_NODE_NAME"
   else
     log "Node not found (already down?) — skipping cordon"
   fi
@@ -40,11 +40,11 @@ cordon_node() {
 
 # --- 2. Drain workloads (safe eviction, protects PVs) ------------------------
 drain_node() {
-  log "Draining node ${AI_CLUSTER_NODE_IP}"
+  log "Draining node ${AI_CLUSTER_NODE_NAME}"
   # --ignore-daemonsets: keep DaemonSets (nvidia-device-plugin) running
   # --delete-emptydir-data: allow eviction of pods using emptyDir
-  if kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" get node "$AI_CLUSTER_NODE_IP" -o name >/dev/null 2>&1; then
-    kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" drain "$AI_CLUSTER_NODE_IP" \
+  if kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" get node "$AI_CLUSTER_NODE_NAME" -o name >/dev/null 2>&1; then
+    kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" drain "$AI_CLUSTER_NODE_NAME" \
       --ignore-daemonsets \
       --delete-emptydir-data \
       --force
