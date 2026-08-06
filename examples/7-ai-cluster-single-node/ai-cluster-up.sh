@@ -77,7 +77,7 @@ ensure_vm_running() {
   local vm_status
   if vm_status=$(curl -skS --fail \
       -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
-      "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status" \
+      "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status/current" \
       2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['status'])" 2>/dev/null); then
     log "VM ${AI_CLUSTER_VMID} status: ${vm_status}"
     if [ "$vm_status" = "stopped" ]; then
