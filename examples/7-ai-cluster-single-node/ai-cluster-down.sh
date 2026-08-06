@@ -78,7 +78,12 @@ pve3_status() {
   curl -sS --fail \
     -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
     "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/status" \
-    | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['status'])"
+    | python3 -c "
+import json, sys
+d = json.load(sys.stdin)['data']
+# /nodes/{node}/status has no 'status' field; uptime > 0 means the node is up
+print('online' if d.get('uptime', 0) > 0 else 'stopped')
+"
 }
 
 poweroff_pve3() {

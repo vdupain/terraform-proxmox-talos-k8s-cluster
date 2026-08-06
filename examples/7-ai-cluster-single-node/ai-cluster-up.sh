@@ -16,6 +16,11 @@
 #   AI_CLUSTER_PVE3_MAC   MAC address of pve3          (default: 54:bf:64:6c:b8:53)
 #   AI_CLUSTER_BROADCAST  LAN broadcast address        (default: 192.168.10.255)
 #   AI_CLUSTER_WAIT_SEC   max seconds waiting for boot (default: 300)
+#   AI_CLUSTER_NODE_IP    node IP                      (default: 192.168.10.203)
+#   AI_CLUSTER_PVE3_NODE  Proxmox host                 (default: pve3)
+#   AI_CLUSTER_VMID       Proxmox VM ID                (required if VM must be started)
+#   PROXMOX_VE_ENDPOINT   Proxmox API base URL         (required if VM must be started)
+#   PROXMOX_VE_API_TOKEN  API token user@realm!id=secret (required if VM must be started)
 #
 # Idempotent: safe to re-run at any point.
 # ==============================================================================
@@ -25,6 +30,7 @@ AI_CLUSTER_PVE3_MAC="${AI_CLUSTER_PVE3_MAC:-54:bf:64:6c:b8:53}"
 AI_CLUSTER_BROADCAST="${AI_CLUSTER_BROADCAST:-192.168.10.255}"
 AI_CLUSTER_WAIT_SEC="${AI_CLUSTER_WAIT_SEC:-300}"
 AI_CLUSTER_NODE_IP="${AI_CLUSTER_NODE_IP:-192.168.10.203}"
+AI_CLUSTER_PVE3_NODE="${AI_CLUSTER_PVE3_NODE:-pve3}"
 AI_CLUSTER_KUBECONFIG="${AI_CLUSTER_KUBECONFIG:-output/kube-config.yaml}"
 
 log()  { printf '[ai-cluster-up] %s\n' "$*"; }
@@ -47,7 +53,51 @@ PY
   log "WoL packet sent"
 }
 
-# --- 2. Wait for the VM to become reachable (Talos apid port 50000) ---------
+# --- 2. Ensure the VM is running (handle pve3 already up) -------------------
+# If pve3 is already powered on (e.g. a previous down failed, or manual use),
+# the WoL packet does nothing and the VM may not start (onboot applies only
+# at host boot). Probe briefly; if the VM is not reachable, query the Proxmox
+# API and start the VM explicitly.
+ensure_vm_running() {
+  # Short initial probe: if the VM answers quickly, pve3 booted and the VM is up.
+  local deadline=$(( $(date +%s) + 30 ))
+  while (( $(date +%s) < deadline )); do
+    if nc -z -w 2 "$AI_CLUSTER_NODE_IP" 50000 2>/dev/null; then
+      log "VM already reachable on ${AI_CLUSTER_NODE_IP}:50000"
+      return 0
+    fi
+    sleep 5
+  done
+
+  : "${PROXMOX_VE_ENDPOINT:?PROXMOX_VE_ENDPOINT required to start the VM (Proxmox API base URL)}"
+  : "${PROXMOX_VE_API_TOKEN:?PROXMOX_VE_API_TOKEN required (format user@realm!id=secret)}"
+  : "${AI_CLUSTER_VMID:?AI_CLUSTER_VMID required (Proxmox VM ID of ai-cluster)}"
+
+  log "VM not reachable after WoL — checking Proxmox VM ${AI_CLUSTER_VMID} on ${AI_CLUSTER_PVE3_NODE}"
+  local vm_status
+  if vm_status=$(curl -sS --fail \
+      -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
+      "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status" \
+      2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['status'])" 2>/dev/null); then
+    log "VM ${AI_CLUSTER_VMID} status: ${vm_status}"
+    if [ "$vm_status" = "stopped" ]; then
+      log "Starting VM ${AI_CLUSTER_VMID}"
+      curl -sS --fail \
+        -X POST \
+        -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
+        "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status/start"
+      log "Start command sent for VM ${AI_CLUSTER_VMID}"
+    elif [ "$vm_status" = "running" ]; then
+      log "VM ${AI_CLUSTER_VMID} already running (still booting?)"
+    else
+      log "VM ${AI_CLUSTER_VMID} status ${vm_status} — continuing to wait for boot"
+    fi
+  else
+    log "Could not read VM ${AI_CLUSTER_VMID} status (API unreachable?) — continuing to wait for boot"
+  fi
+}
+
+# --- 3. Wait for the VM to become reachable (Talos apid port 50000) ---------
 wait_for_boot() {
   log "Waiting for ai-cluster to boot (up to ${AI_CLUSTER_WAIT_SEC}s)"
   local deadline=$(( $(date +%s) + AI_CLUSTER_WAIT_SEC ))
@@ -61,7 +111,7 @@ wait_for_boot() {
   fail "Timed out waiting for ai-cluster to boot (${AI_CLUSTER_NODE_IP}:50000 not reachable)"
 }
 
-# --- 3. Verify nodes report Ready -------------------------------------------
+# --- 4. Verify nodes report Ready -------------------------------------------
 wait_for_ready() {
   log "Verifying nodes Ready"
   if ! kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" wait --for=condition=Ready node --all --timeout=120s 2>/dev/null; then
@@ -73,6 +123,7 @@ wait_for_ready() {
 
 main() {
   send_wol
+  ensure_vm_running
   wait_for_boot
   wait_for_ready
   log "ai-cluster is UP"
