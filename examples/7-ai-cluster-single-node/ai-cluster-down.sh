@@ -75,7 +75,7 @@ shutdown_node() {
 # --- 4. Power off the pve3 host via Proxmox API ------------------------------
 # Runs from a reachable node (pve0 / Hermes host), NEVER from pve3 itself.
 pve3_status() {
-  curl -sS --fail \
+  curl -skS --fail \
     -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
     "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/status" \
     | python3 -c "
@@ -96,7 +96,7 @@ poweroff_pve3() {
     log "${AI_CLUSTER_PVE3_NODE} status: ${status}"
     if [ "$status" != "stopped" ]; then
       log "Powering off ${AI_CLUSTER_PVE3_NODE}"
-      curl -sS --fail \
+      curl -skS --fail \
         -X POST \
         -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
         --data-urlencode "command=shutdown" \
