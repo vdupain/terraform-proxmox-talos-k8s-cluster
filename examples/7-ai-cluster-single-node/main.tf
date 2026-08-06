@@ -40,4 +40,5 @@ module "talos_k8s_cluster" {
   }
 
   proxmox = var.proxmox
+  gitops  = var.gitops
 }
