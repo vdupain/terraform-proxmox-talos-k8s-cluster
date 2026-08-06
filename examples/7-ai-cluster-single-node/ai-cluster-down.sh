@@ -76,7 +76,7 @@ shutdown_node() {
 # Runs from a reachable node (pve0 / Hermes host), NEVER from pve3 itself.
 pve3_status() {
   curl -sS --fail \
-    -H "Authorization: PVEAPIToken=${PROXMOX_VE_API_TOKEN}" \
+    -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
     "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/status" \
     | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['status'])"
 }
@@ -93,7 +93,7 @@ poweroff_pve3() {
       log "Powering off ${AI_CLUSTER_PVE3_NODE}"
       curl -sS --fail \
         -X POST \
-        -H "Authorization: PVEAPIToken=${PROXMOX_VE_API_TOKEN}" \
+        -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
         --data-urlencode "command=shutdown" \
         "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/status"
       log "Power-off command sent to ${AI_CLUSTER_PVE3_NODE}"
