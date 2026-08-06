@@ -35,15 +35,23 @@ Idempotent: safe to re-run.
 
 ## Shutdown (`ai-cluster-down.sh`)
 
+Full power-off: VM stop then pve3 host shutdown.
+
 1. **Cordon** — stop new workloads on the node (`ai-cluster-cp-0`).
 2. **Drain** — evict running workloads safely (protects PVs and etcd).
 3. **Talos shutdown** — ordered halt, powers off the VM.
+4. **pve3 power-off** — Proxmox API `POST /nodes/pve3/status` (command=shutdown).
 
 ```bash
+# Must run from a node that is NOT pve3 (pve0 online, or the Hermes host)
+export PROXMOX_VE_ENDPOINT="https://pve0:8006"
+export PROXMOX_VE_API_TOKEN="user@pam!token=secret"
 ./ai-cluster-down.sh
 ```
 
-Idempotent: safe to re-run.
+Idempotent: safe to re-run (skips if pve3 already stopped).
+
+> **Execution context**: the homelab profile (Hermes) runs these scripts — it has Proxmox API access. The pve3 power-off is executed from a reachable node (pve0), never from pve3 itself.
 
 ## Access
 
