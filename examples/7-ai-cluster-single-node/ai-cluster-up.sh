@@ -17,8 +17,10 @@
 #   AI_CLUSTER_BROADCAST  LAN broadcast address        (default: 192.168.10.255)
 #   AI_CLUSTER_WAIT_SEC   max seconds waiting for boot (default: 300)
 #   AI_CLUSTER_NODE_IP    node IP                      (default: 192.168.10.203)
+#   AI_CLUSTER_NODE_NAME  k8s node name for uncordon   (default: ai-cluster-cp-0)
 #   AI_CLUSTER_PVE3_NODE  Proxmox host                 (default: pve3)
 #   AI_CLUSTER_VMID       Proxmox VM ID                (required if VM must be started)
+#   AI_CLUSTER_READY_TIMEOUT  ready wait timeout       (default: 300)
 #   PROXMOX_VE_ENDPOINT   Proxmox API base URL         (required if VM must be started)
 #   PROXMOX_VE_API_TOKEN  API token user@realm!id=secret (required if VM must be started)
 #
@@ -30,8 +32,10 @@ AI_CLUSTER_PVE3_MAC="${AI_CLUSTER_PVE3_MAC:-54:bf:64:6c:b8:53}"
 AI_CLUSTER_BROADCAST="${AI_CLUSTER_BROADCAST:-192.168.10.255}"
 AI_CLUSTER_WAIT_SEC="${AI_CLUSTER_WAIT_SEC:-300}"
 AI_CLUSTER_NODE_IP="${AI_CLUSTER_NODE_IP:-192.168.10.203}"
+AI_CLUSTER_NODE_NAME="${AI_CLUSTER_NODE_NAME:-ai-cluster-cp-0}"
 AI_CLUSTER_PVE3_NODE="${AI_CLUSTER_PVE3_NODE:-pve3}"
 AI_CLUSTER_KUBECONFIG="${AI_CLUSTER_KUBECONFIG:-output/kube-config.yaml}"
+AI_CLUSTER_READY_TIMEOUT="${AI_CLUSTER_READY_TIMEOUT:-300}"
 
 log()  { printf '[ai-cluster-up] %s\n' "$*"; }
 fail() { printf '[ai-cluster-up] ERROR: %s\n' "$*" >&2; exit 1; }
@@ -77,7 +81,7 @@ ensure_vm_running() {
   local vm_status
   if vm_status=$(curl -skS --fail \
       -H "Authorization: PVEAPI$(printf 'Token=%s' "${PROXMOX_VE_API_TOKEN}")" \
-      "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status" \
+      "${PROXMOX_VE_ENDPOINT%/}/api2/json/nodes/${AI_CLUSTER_PVE3_NODE}/qemu/${AI_CLUSTER_VMID}/status/current" \
       2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['status'])" 2>/dev/null); then
     log "VM ${AI_CLUSTER_VMID} status: ${vm_status}"
     if [ "$vm_status" = "stopped" ]; then
@@ -113,12 +117,18 @@ wait_for_boot() {
 
 # --- 4. Verify nodes report Ready -------------------------------------------
 wait_for_ready() {
-  log "Verifying nodes Ready"
-  if ! kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" wait --for=condition=Ready node --all --timeout=120s 2>/dev/null; then
+  log "Verifying nodes Ready (up to ${AI_CLUSTER_READY_TIMEOUT}s)"
+  if ! kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" wait --for=condition=Ready node --all --timeout="${AI_CLUSTER_READY_TIMEOUT}s" 2>/dev/null; then
     fail "Nodes not Ready after boot"
   fi
   log "Nodes Ready:"
   kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" get nodes
+}
+
+# --- 5. Un-cordon the node (down.sh cordons it; restore scheduling) ---------
+uncordon_node() {
+  log "Un-cordoning node ${AI_CLUSTER_NODE_NAME}"
+  kubectl --kubeconfig "$AI_CLUSTER_KUBECONFIG" uncordon "$AI_CLUSTER_NODE_NAME" || true
 }
 
 main() {
@@ -126,6 +136,7 @@ main() {
   ensure_vm_running
   wait_for_boot
   wait_for_ready
+  uncordon_node
   log "ai-cluster is UP"
 }
 
