@@ -73,6 +73,11 @@ To add more models, grow `user_disk_size` in `main.tf` (`autoexpand=on` picks it
 
 ## Troubleshooting
 
+- **`up.sh` times out at "Verifying nodes Ready"** — after a full power-off cycle
+  (pve3 was off), the K8s API may never come up: `/etc/kubernetes/manifests`
+  is empty (race at boot when the VM starts via onboot before storage is ready).
+  Fix: `talosctl --talosconfig output/talos-config.yaml --nodes 192.168.10.203 reboot`
+  then re-run `./ai-cluster-up.sh`.
 - **`ollama list` empty after startup** — check the open-webui HelmRelease has the
   `ollama.ollama.models` structure (double nesting, subchart v1.65.0) so the postStart
   hook pulls models.
