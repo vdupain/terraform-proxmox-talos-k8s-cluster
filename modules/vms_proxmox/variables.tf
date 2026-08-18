@@ -23,6 +23,7 @@ variable "cluster" {
     dns_servers           = optional(list(string), null)
     cidr                  = number
     vlan_id               = optional(number, null)
+    mtu                   = optional(number, null)
     network_device_bridge = optional(string, "vmbr0")
     name                  = string
     talos_version         = string
