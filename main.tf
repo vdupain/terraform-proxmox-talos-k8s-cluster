@@ -8,6 +8,7 @@ module "vms_proxmox" {
     dns_servers           = var.cluster.dns_servers
     cidr                  = var.cluster.cidr
     vlan_id               = var.cluster.vlan_id
+    mtu                   = var.cluster.mtu
     talos_version         = var.cluster.talos_version
     network_dhcp          = var.cluster.network_dhcp
     network_device_bridge = var.cluster.network_device_bridge
