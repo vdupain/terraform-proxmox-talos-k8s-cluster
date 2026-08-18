@@ -8,11 +8,6 @@ module "talos_k8s_cluster" {
     gateway  = "192.168.10.1"
     cidr     = 24
     endpoint = "192.168.10.203"
-    # VLAN 50 (HOMELAB) migration: the VXLAN path (OPNsense → AP → repeater → switch)
-    # requires MTU 1400 on the VMs. Set vlan_id = 50 and mtu = 1400 for the
-    # recreated cluster (ticket #40). IPs above are updated alongside.
-    # vlan_id = 50
-    # mtu     = 1400
   }
 
   vms = {
