@@ -26,6 +26,9 @@ cluster:
   - name: zfs-setup
     contents: |
       ${indent(6, zfs_setup)}
+  - name: gateway-api-crds
+    contents: |
+      ${indent(6, gateway_api_crds)}
   - name: cilium-values
     contents: |
       ${indent(6, cilium_values)}

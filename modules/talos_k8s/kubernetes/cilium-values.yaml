@@ -19,6 +19,8 @@ data:
       hostRoot: /sys/fs/cgroup
     ipam:
       mode: kubernetes
+    gatewayAPI:
+      enabled: true
     l2announcements:
       enabled: true
     externalIPs:

@@ -67,6 +67,7 @@ resource "talos_machine_configuration_apply" "controlplane" {
         vip_interface                      = var.cluster.vip_interface
         cilium_values                      = file("${path.module}/kubernetes/cilium-values.yaml")
         cilium_install                     = file("${path.module}/kubernetes/cilium-install.yaml")
+        gateway_api_crds                   = file("${path.module}/kubernetes/gateway-api-crds.yaml")
         zfs_setup                          = file("${path.module}/kubernetes/zfs-setup.yaml")
       }),
     ],
