@@ -25,6 +25,7 @@ variable "cluster" {
     dns_servers                        = optional(list(string))
     cidr                               = optional(number)
     vlan_id                            = optional(number, null)
+    mtu                                = optional(number, null)
     network_device_bridge              = optional(string, "vmbr0")
     endpoint                           = optional(string)
     allow_scheduling_on_control_planes = optional(bool, true)
