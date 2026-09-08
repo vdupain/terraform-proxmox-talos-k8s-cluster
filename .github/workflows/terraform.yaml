@@ -46,11 +46,13 @@ jobs:
       - name: Terraform Test (modules/talos_k8s)
         run: |
           cd modules/talos_k8s
+          terraform init
           terraform test
 
       - name: Terraform Test (modules/vms_proxmox)
         run: |
           cd modules/vms_proxmox
+          terraform init
           terraform test
 
       - name: Terraform Plan
