@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.10.5"
+          terraform_version: "~> 1.11"
 
       - name: Terraform Init
         run: terraform init
@@ -41,9 +41,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Test (root)
-        run: |
-          terraform init
-          terraform test
+        run: terraform test
 
       - name: Terraform Test (modules/talos_k8s)
         run: |

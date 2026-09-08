@@ -55,15 +55,18 @@ resource "proxmox_virtual_environment_vm" "vms" {
     file_id      = proxmox_download_file.this["${each.value.host_node}_${local.image_ids[local.vm_gpu_types[each.key]]}"].id
   }
 
-  # user disk
-  disk {
-    datastore_id = each.value.datastore_id
-    interface    = "scsi1"
-    cache        = "writethrough"
-    discard      = "on"
-    ssd          = "true"
-    file_format  = each.value.disk_file_format
-    size         = each.value.user_disk_size
+  # user disk (optional, only created when size > 0)
+  dynamic "disk" {
+    for_each = each.value.user_disk_size > 0 ? [1] : []
+    content {
+      datastore_id = each.value.datastore_id
+      interface    = "scsi1"
+      cache        = "writethrough"
+      discard      = "on"
+      ssd          = "true"
+      file_format  = each.value.disk_file_format
+      size         = each.value.user_disk_size
+    }
   }
 
   boot_order = ["scsi0"]
