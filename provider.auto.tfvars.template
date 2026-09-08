@@ -8,9 +8,3 @@ proxmox = {
   random_vm_id_start = 10000
   random_vm_id_end   = 99999
 }
-
-github = {
-  token      = "github_pat"
-  org        = "username"
-  repository = "repository"
-}

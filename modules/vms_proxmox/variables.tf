@@ -42,12 +42,13 @@ variable "vms" {
     host_node        = string
     machine_type     = string
     datastore_id     = optional(string, "local-lvm")
-    ip               = string
+    ip               = optional(string)
     cpu              = number
     memory_dedicated = number
-    system_disk_size = number
-    user_disk_size   = number
+    system_disk_size = optional(number, 10)
+    user_disk_size   = optional(number, 0)
     disk_file_format = optional(string, "raw")
+    install_disk     = optional(string, "/dev/sda")
     gpu              = optional(string)
   }))
 }
